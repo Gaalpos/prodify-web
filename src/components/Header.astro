@@ -1,10 +1,11 @@
 ---
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 
 <header class="hdr">
   <div class="wrap bar">
-    <a class="brand" href="/" aria-label="Prodify home">
-      <img src="/favicon.svg" alt="" width="30" height="30" />
+    <a class="brand" href={base} aria-label="Prodify home">
+      <img src={`${base}favicon.svg`} alt="" width="30" height="30" />
       <span>Prodify</span>
     </a>
     <nav aria-label="Main">

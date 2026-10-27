@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import AppMockup from '../components/AppMockup.astro';
 import { features } from '../data/features';
 
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const version = '1.8.1';
 const releases = 'https://github.com/Gaalpos/prodify/releases/latest';
 
@@ -119,7 +120,7 @@ obsess over quality.</pre>
 
   <footer>
     <div class="wrap foot">
-      <span class="fb"><img src="/favicon.svg" alt="" width="22" height="22" /> Prodify</span>
+      <span class="fb"><img src={`${base}favicon.svg`} alt="" width="22" height="22" /> Prodify</span>
       <span class="credits">
         Exercise data from <a href="https://github.com/yuhonas/free-exercise-db">free-exercise-db</a> and <a href="https://wger.de">wger</a>. Uses the TMDB API but is not endorsed or certified by TMDB.
         Fonts: Figtree and Literata (OFL).
