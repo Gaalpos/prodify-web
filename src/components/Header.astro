@@ -1,0 +1,29 @@
+---
+---
+
+<header class="hdr">
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label="Prodify home">
+      <img src="/favicon.svg" alt="" width="30" height="30" />
+      <span>Prodify</span>
+    </a>
+    <nav aria-label="Main">
+      <a href="#features">Features</a>
+      <a href="#markdown">Your files</a>
+      <a href="#download" class="cta">Download</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .hdr{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+  .brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font:700 22px Literata,Georgia,serif;letter-spacing:-.01em}
+  .brand img{border-radius:8px}
+  nav{display:flex;align-items:center;gap:4px}
+  nav a{color:var(--mut);text-decoration:none;font-weight:500;padding:8px 12px;border-radius:8px}
+  nav a:hover{color:var(--ink);background:var(--acs)}
+  nav a.cta{color:var(--onac);background:var(--ac);font-weight:700;margin-left:6px}
+  nav a.cta:hover{background:color-mix(in srgb,var(--ac) 88%,var(--ink))}
+  @media (max-width:560px){nav a:not(.cta){display:none}}
+</style>

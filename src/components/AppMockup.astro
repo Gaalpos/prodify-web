@@ -1,0 +1,98 @@
+---
+// A static, hand-built preview of Prodify's Home view, styled with the app's own tokens.
+import { features } from '../data/features';
+
+const tasks = [
+  { t: 'Draft the chapter outline', m: 'Writing · today', done: true },
+  { t: 'Book the dentist', m: 'Today · 17:00', done: false },
+  { t: 'Review project budget', m: 'Work · tomorrow', done: false },
+];
+const habits = [
+  { n: 'Read 20 min', c: '#5fa57f', days: [1, 1, 1, 0, 1, 1, 1] },
+  { n: 'Stretch', c: '#d4605a', days: [1, 0, 1, 1, 1, 0, 1] },
+  { n: 'No phone after 22h', c: '#6f7fb0', days: [0, 1, 1, 1, 0, 1, 1] },
+];
+---
+
+<div class="win" role="img" aria-label="Prodify's Home screen with today's tasks, habits and a journal question">
+  <div class="chrome" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="app" aria-hidden="true">
+    <aside>
+      <div class="logo">Prodify</div>
+      {features.map((f, i) => (
+        <div class:list={['nb', { on: i === 0 }]}>
+          <span class="dot" style={`background:${f.color}`}></span>{f.name}
+        </div>
+      ))}
+    </aside>
+    <div class="main">
+      <p class="date">Tuesday, October 27</p>
+      <h3>Good evening</h3>
+      <div class="grid">
+        <div class="card">
+          <h4>Today</h4>
+          {tasks.map((x) => (
+            <div class:list={['task', { done: x.done }]}>
+              <span class="chk">{x.done && <svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" /></svg>}</span>
+              <span><b>{x.t}</b><small>{x.m}</small></span>
+            </div>
+          ))}
+        </div>
+        <div class="card">
+          <h4>Habits</h4>
+          {habits.map((h) => (
+            <div class="habit">
+              <span class="hn"><span class="dot" style={`background:${h.c}`}></span>{h.n}</span>
+              <span class="days">
+                {h.days.map((d) => <i style={d ? `background:${h.c}` : undefined}></i>)}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div class="card q">
+          <h4>Reflection</h4>
+          <p>What made today feel lighter than yesterday?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .win{background:var(--sf);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;font-size:13px;line-height:1.45;text-align:left}
+  .chrome{display:flex;gap:7px;padding:12px 14px;border-bottom:1px solid var(--line)}
+  .chrome i{width:11px;height:11px;border-radius:50%;background:var(--line)}
+  .app{display:grid;grid-template-columns:168px 1fr;background:var(--bg);min-height:420px}
+  aside{padding:16px 10px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:1px}
+  .logo{font:700 20px Literata,Georgia,serif;margin:0 0 12px 8px}
+  .nb{display:flex;align-items:center;gap:9px;padding:5px 9px;border-radius:7px;color:var(--mut);font-weight:500}
+  .nb.on{background:var(--acs);color:var(--ink);font-weight:700}
+  .nb .dot{width:8px;height:8px}
+  .main{padding:22px 24px}
+  .date{color:var(--mut);font-size:12px}
+  h3{font-size:26px;margin:2px 0 16px}
+  h4{font:700 12px Figtree,sans-serif;margin:0 0 8px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+  .grid{display:grid;grid-template-columns:1.2fr 1fr;gap:12px}
+  .card{background:var(--sf);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .card.q{grid-column:1/-1}
+  .q p{font:italic 400 16px/1.5 Literata,Georgia,serif}
+  .task{display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--line)}
+  .task:first-of-type{border-top:0}
+  .task b{display:block;font-weight:600}
+  .task small{color:var(--mut);font-size:11.5px}
+  .task.done b{text-decoration:line-through;color:var(--mut)}
+  .chk{width:17px;height:17px;border-radius:5px;border:1.5px solid var(--line);flex:none;margin-top:1px;display:grid;place-items:center}
+  .done .chk{background:var(--ac);border-color:var(--ac)}
+  .chk svg{width:12px;fill:none;stroke:var(--onac);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .habit{display:flex;flex-direction:column;gap:5px;padding:6px 0}
+  .hn{display:flex;align-items:center;gap:7px;font-weight:600}
+  .hn .dot{width:8px;height:8px}
+  .days{display:flex;gap:4px}
+  .days i{width:16px;height:16px;border-radius:5px;background:color-mix(in srgb,var(--mut) 18%,transparent)}
+  @media (max-width:760px){
+    .app{grid-template-columns:1fr;min-height:0}
+    aside{display:none}
+    .grid{grid-template-columns:1fr}
+    .main{padding:18px 16px}
+  }
+</style>
