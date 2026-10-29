@@ -22,7 +22,7 @@ Open the [latest release](https://github.com/Gaalpos/prodify/releases/latest) an
 Install the package from a terminal in the folder you downloaded it to:
 
 ```bash
-sudo apt install ./Prodify_1.8.1_amd64.deb
+sudo apt install ./Prodify_1.9.0_amd64.deb
 ```
 
 You can also double-click the `.deb` to open it in your software center. Prodify then shows up in your app menu.
