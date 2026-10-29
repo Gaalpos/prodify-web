@@ -1,0 +1,29 @@
+---
+import { getCollection, render } from 'astro:content';
+import Docs from '../../layouts/Docs.astro';
+
+export async function getStaticPaths() {
+  const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order);
+  return docs.map((doc, i) => ({ params: { slug: doc.id }, props: { doc, prev: docs[i - 1], next: docs[i + 1] } }));
+}
+
+const { doc, prev, next } = Astro.props;
+const { Content, headings } = await render(doc);
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<Docs title={doc.data.title} description={doc.data.description} current={doc.id} headings={headings}>
+  <Content />
+  <nav class="pager" aria-label="Next and previous">
+    {prev ? <a href={`${base}docs/${prev.id}/`}><span>Previous</span>{prev.data.title}</a> : <span></span>}
+    {next ? <a class="nx" href={`${base}docs/${next.id}/`}><span>Next</span>{next.data.title}</a> : <a class="nx" href={`${base}docs/faq/`}><span>Next</span>FAQ</a>}
+  </nav>
+</Docs>
+
+<style>
+  .pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:48px}
+  .pager a{display:flex;flex-direction:column;gap:2px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--sf);color:var(--ink);text-decoration:none;font-weight:700}
+  .pager a:hover{border-color:var(--ac)}
+  .pager a span{color:var(--mut);font-weight:500;font-size:13px}
+  .pager .nx{text-align:right}
+</style>

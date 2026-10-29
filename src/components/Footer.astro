@@ -1,0 +1,38 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<footer>
+  <div class="wrap foot">
+    <div class="col">
+      <span class="fb"><img src={`${base}favicon.svg`} alt="" width="22" height="22" /> Prodify</span>
+      <span class="meta">Notes, journal, tasks and habits in plain Markdown.</span>
+    </div>
+    <nav class="links" aria-label="Footer">
+      <a href={`${base}docs/`}>Docs</a>
+      <a href={`${base}docs/faq/`}>FAQ</a>
+      <a href="https://github.com/Gaalpos/prodify">GitHub</a>
+      <a href="https://github.com/Gaalpos/prodify/releases/latest">Releases</a>
+    </nav>
+    <p class="credits">
+      Exercise data from <a href="https://github.com/yuhonas/free-exercise-db">free-exercise-db</a> and <a href="https://wger.de">wger</a>.
+      Radio by <a href="https://somafm.com">SomaFM</a>, ambient sounds from <a href="https://freesound.org">Freesound</a>.
+      Uses the TMDB API but is not endorsed or certified by TMDB. Fonts: Figtree and Literata (OFL).
+    </p>
+  </div>
+</footer>
+
+<style>
+  footer{border-top:1px solid var(--line);padding:32px 0 44px;margin-top:auto}
+  .foot{display:grid;grid-template-columns:auto 1fr;gap:16px 32px;align-items:start}
+  .col{display:flex;flex-direction:column;gap:4px}
+  .fb{display:flex;align-items:center;gap:8px;font:700 17px Literata,Georgia,serif}
+  .fb img{border-radius:6px}
+  .meta{color:var(--mut);font-size:14px}
+  .links{display:flex;flex-wrap:wrap;gap:4px 18px;justify-content:flex-end}
+  .links a{color:var(--ink);text-decoration:none;font-weight:500}
+  .links a:hover{color:var(--ac)}
+  .credits{grid-column:1/-1;color:var(--mut);font-size:13.5px;max-width:760px}
+  .credits a{color:inherit}
+  @media (max-width:640px){.foot{grid-template-columns:1fr}.links{justify-content:flex-start}}
+</style>

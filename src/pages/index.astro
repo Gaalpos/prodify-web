@@ -1,27 +1,32 @@
 ---
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
-import AppMockup from '../components/AppMockup.astro';
-import { features } from '../data/features';
+import Footer from '../components/Footer.astro';
+import Screen from '../components/Screen.astro';
+import { sections } from '../data/features';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const version = '1.8.1';
 const releases = 'https://github.com/Gaalpos/prodify/releases/latest';
+
+// The big alternating rows; the rest go in the compact grid below them.
+const rows = sections.filter((s) => !['files', 'music'].includes(s.id));
+const more = sections.filter((s) => ['files', 'music'].includes(s.id));
 
 const platforms = [
   { name: 'Linux', file: '.deb', note: 'Ubuntu, Linux Mint, Debian and friends' },
-  { name: 'Windows', file: '.exe', note: 'Windows 10 and 11 installer' },
+  { name: 'Windows', file: '.exe', note: 'Installer for Windows 10 and 11' },
   { name: 'Android', file: '.apk', note: 'Phones and tablets, arm64' },
 ];
 
 const tree = [
-  ['notes/', 'one .md file per note, with Obsidian-style front matter'],
-  ['journal/', 'a file per day, mood and photos included'],
-  ['projects/', 'a file per project'],
-  ['habits/', 'check-ins you can read by eye'],
+  ['notes/', 'one file per note, Obsidian-style front matter'],
+  ['journal/', 'an entry per file, plus mood check-ins'],
+  ['projects/', 'a file per project, milestones included'],
+  ['habits/', 'one file per habit, with its log'],
   ['collections/', 'books, movies, series, anime, games'],
-  ['tasks.md', 'every task in one checklist'],
-  ['events.md', 'your calendar'],
+  ['health/', 'workouts, meditation, body stats'],
+  ['tasks.md', 'every task as a checklist line'],
+  ['events.md', 'your calendar, one event per line'],
 ];
 ---
 
@@ -31,34 +36,81 @@ const tree = [
     <section class="hero">
       <div class="wrap">
         <div class="intro">
-          <p class="eyebrow">Version {version} · Linux · Windows · Android</p>
+          <p class="eyebrow">Free · Linux · Windows · Android</p>
           <h1>Your days, written down <em>in one calm place.</em></h1>
           <p class="lead">
-            Prodify brings notes, journal, tasks, projects, habits, health and collections together in one app,
-            and saves every bit of it as plain Markdown files that stay yours.
+            Prodify brings your notes, journal, tasks, projects, habits, health and collections into one app,
+            and saves all of it as plain Markdown files you own.
           </p>
           <div class="ctas">
             <a class="btn primary" href="#download">Download Prodify</a>
-            <a class="btn ghost" href="#features">See what's inside</a>
+            <a class="btn ghost" href={`${base}docs/`}>Read the docs</a>
           </div>
         </div>
-        <div class="shot"><AppMockup /></div>
+        <div class="heroshot">
+          <Screen shot="today" full eager alt="Prodify's Home page: section cards on the left, a focus session, mood check-in, clock, today's question and ambient sounds" sizes="(max-width: 1120px) 100vw, 1080px" />
+        </div>
       </div>
     </section>
 
-    <section class="block" id="features">
+    <section class="block" id="sections">
       <div class="wrap">
-        <p class="eyebrow">Features</p>
-        <h2>Twelve tools that share one home.</h2>
-        <p class="lead">Each area has its own color, so you always know where you are. Arrange them as a sidebar, cards, an icon grid or a top bar.</p>
-        <ul class="feats">
-          {features.map((f) => (
-            <li>
-              <h3><span class="dot" style={`background:${f.color}`}></span>{f.name}</h3>
-              <p>{f.text}</p>
-            </li>
+        <p class="eyebrow">Sections</p>
+        <h2>Twelve sections, one home.</h2>
+        <p class="lead">
+          Each section does one job well and shares its data with the others: a task can belong to a project, show up
+          on the calendar and count toward this month's insights. Turn off the sections you don't need, reorder the
+          rest, and pick a sidebar, cards, an icon grid or a top bar to move between them.
+        </p>
+        <ul class="chips" aria-label="Jump to a section">
+          {sections.map((s) => (
+            <li><a href={`#s-${s.id}`}><span class="dot" style={`background:${s.color}`}></span>{s.name}</a></li>
           ))}
         </ul>
+
+        <div class="rows">
+          {rows.map((s, i) => (
+            <article class:list={['row', { flip: i % 2 === 1 }]} id={`s-${s.id}`}>
+              <div class="copy">
+                <p class="tag"><span class="dot" style={`background:${s.color}`}></span>{s.name}</p>
+                <h3>{s.tagline}</h3>
+                <p class="text">{s.text}</p>
+                <ul class="points">
+                  {s.points.map((p) => <li>{p}</li>)}
+                </ul>
+                <a class="more" href={`${base}docs/${s.doc}/`}>How {s.name} works <span aria-hidden="true">→</span></a>
+              </div>
+              <div class="shot">
+                {s.shot && <Screen shot={s.shot} alt={`Prodify's ${s.name} section`} />}
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div class="minis">
+          {more.map((s) => (
+            <article class="mini" id={`s-${s.id}`}>
+              <p class="tag"><span class="dot" style={`background:${s.color}`}></span>{s.name}</p>
+              <h3>{s.tagline}</h3>
+              <p class="text">{s.text}</p>
+              {s.shot && <Screen shot={s.shot} alt={`Prodify's ${s.name} section`} sizes="(max-width: 900px) 100vw, 520px" />}
+            </article>
+          ))}
+          <article class="mini plain">
+            <p class="tag"><span class="dot" style="background:var(--ac)"></span>Everywhere</p>
+            <h3>Search and commands</h3>
+            <p class="text">
+              Press <kbd>Ctrl</kbd> <kbd>K</kbd> from anywhere to search every note, task, entry and item, or type
+              <kbd>/</kbd> to run a command. The <b>+</b> button captures a task, note or entry from any page.
+            </p>
+            <ul class="points">
+              <li>Reminders and notifications in a bell panel</li>
+              <li>Light, dark and OLED themes, accent colors and fonts</li>
+              <li>English and Spanish</li>
+              <li>A phone tab bar with the three sections you pick</li>
+            </ul>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -66,18 +118,19 @@ const tree = [
       <div class="wrap split">
         <div>
           <p class="eyebrow">Your files</p>
-          <h2>Plain Markdown. No account, no lock-in.</h2>
+          <h2>Plain Markdown. No lock-in.</h2>
           <p class="lead">
-            Everything lives in a <code>Prodify</code> folder in your home directory. Open it in any editor,
-            back it up, sync it with the tool you already use, or point Obsidian at it. Edits made outside the
-            app show up the next time you open it.
+            By default everything lives in a <code>Prodify</code> folder in your home directory. Open it in any editor,
+            back it up, sync it with Syncthing, or point Obsidian at it. Edits made outside the app show up the next
+            time you open it.
           </p>
           <ul class="checks">
-            <li>Works offline, nothing leaves your device unless you ask</li>
+            <li>Works offline: nothing leaves your device unless you turn on sync</li>
             <li>Note properties use the same YAML front matter as Obsidian</li>
-            <li>Light, dark and OLED themes, five navigation layouts</li>
-            <li>In English and Spanish</li>
+            <li>Automatic daily backups, plus an optional mirror on a second drive</li>
+            <li>Prefer it tidy? Switch to app storage, a private database inside Prodify</li>
           </ul>
+          <a class="more" href={`${base}docs/data-folder/`}>See every file format <span aria-hidden="true">→</span></a>
         </div>
         <div class="tree" aria-label="Example of the Prodify folder">
           <div class="path">~/Prodify</div>
@@ -87,23 +140,48 @@ const tree = [
               <span>{desc}</span>
             </div>
           ))}
-          <pre class="md"><span class="fm">---
-created: 2026-10-27
-tags: [reading, ideas]
-categories: ["[[Books]]"]
----</span>
-<span class="hd"># Notes on slow productivity</span>
-Do fewer things, work at a natural pace,
-obsess over quality.</pre>
+          <pre class="md"><span class="hd"># Tasks</span>
+
+- [ ] Call the dentist (due: 2026-10-30) (priority: high)
+- [ ] Water the plants (repeat: weekly)
+- [x] Draft the outline (done: 2026-10-30)</pre>
         </div>
       </div>
     </section>
 
-    <section class="block" id="download">
+    <section class="block" id="privacy">
+      <div class="wrap">
+        <p class="eyebrow">Privacy and sync</p>
+        <h2>Local first. Encrypted when it leaves.</h2>
+        <p class="lead">Start with a local account: free forever, no sign-up, works offline. Add more only if you want it.</p>
+        <div class="cards3">
+          <div class="card">
+            <h3>Password and encryption</h3>
+            <p>Lock Prodify with a password (<kbd>Ctrl</kbd> <kbd>L</kbd> locks it now) and encrypt your files on disk with AES-256-GCM. A recovery key gets you back in if you forget the password.</p>
+          </div>
+          <div class="card">
+            <h3>Prodify Cloud</h3>
+            <p>Sign in with a code sent to your email and keep your devices in sync. Files are encrypted on your device before they're uploaded, so the server only stores data it can't read.</p>
+          </div>
+          <div class="card">
+            <h3>Several people, one computer</h3>
+            <p>Each person gets their own space and their own data folder. Switch users from Settings without mixing anyone's notes.</p>
+          </div>
+        </div>
+        <div class="plans" aria-label="Prodify Cloud plans">
+          <div class="plan"><b>Free</b><span>100 MB</span><em>Included</em></div>
+          <div class="plan"><b>Basic</b><span>5 GB</span><em>Coming soon</em></div>
+          <div class="plan"><b>Pro</b><span>50 GB</span><em>Coming soon</em></div>
+        </div>
+        <p class="note">AI features are optional and off unless you add your own Claude API key. <a href={`${base}docs/ai-connections/`}>Learn more</a>.</p>
+      </div>
+    </section>
+
+    <section class="block alt" id="download">
       <div class="wrap">
         <p class="eyebrow">Download</p>
-        <h2>Get Prodify {version}</h2>
-        <p class="lead">Free, and the same app on every platform. Your Markdown folder moves with you.</p>
+        <h2>Get Prodify</h2>
+        <p class="lead">Free, and the same app on every platform. Grab the file for your system from the latest release on GitHub.</p>
         <div class="plats">
           {platforms.map((p) => (
             <a class="plat" href={releases}>
@@ -114,33 +192,46 @@ obsess over quality.</pre>
             </a>
           ))}
         </div>
+        <p class="note">Not sure how to install it? <a href={`${base}docs/install/`}>Follow the install guide</a>, or check the <a href={`${base}docs/faq/`}>FAQ</a>.</p>
       </div>
     </section>
   </main>
-
-  <footer>
-    <div class="wrap foot">
-      <span class="fb"><img src={`${base}favicon.svg`} alt="" width="22" height="22" /> Prodify</span>
-      <span class="credits">
-        Exercise data from <a href="https://github.com/yuhonas/free-exercise-db">free-exercise-db</a> and <a href="https://wger.de">wger</a>. Uses the TMDB API but is not endorsed or certified by TMDB.
-        Fonts: Figtree and Literata (OFL).
-      </span>
-    </div>
-  </footer>
+  <Footer />
 </Base>
 
 <style>
-  .hero{padding:clamp(48px,8vw,96px) 0 clamp(64px,9vw,104px);overflow:hidden}
-  .hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(32px,5vw,64px);align-items:center}
-  .hero h1{font-size:clamp(38px,5.6vw,62px);margin-bottom:20px}
+  .hero{padding:clamp(48px,7vw,88px) 0 clamp(56px,8vw,96px)}
+  .intro{max-width:760px;margin:0 auto;text-align:center}
+  .intro .lead{margin:0 auto}
+  .hero h1{font-size:clamp(38px,5.6vw,64px);margin-bottom:20px}
   .hero h1 em{color:var(--ac);font-style:italic;font-weight:500}
-  .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-  .shot{min-width:0}
+  .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;justify-content:center}
+  .heroshot{margin:clamp(40px,6vw,64px) auto 0;max-width:1080px}
+  .heroshot :global(img){border-radius:14px;box-shadow:var(--shadow)}
 
-  .feats{list-style:none;padding:0;margin:48px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
-  .feats li{background:var(--sf);border:1px solid var(--line);border-radius:14px;padding:20px 20px 22px}
-  .feats h3{display:flex;align-items:center;gap:10px;font:700 17px Figtree,sans-serif;letter-spacing:0;margin-bottom:6px}
-  .feats p{color:var(--mut);font-size:15.5px}
+  .chips{list-style:none;padding:0;margin:28px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+  .chips a{display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--sf);color:var(--ink);text-decoration:none;font-weight:500;font-size:15px}
+  .chips a:hover{border-color:var(--mut)}
+
+  .rows{display:flex;flex-direction:column;gap:clamp(56px,8vw,96px);margin-top:clamp(56px,8vw,88px)}
+  .row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,64px);align-items:center;scroll-margin-top:96px}
+  .row.flip{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+  .row.flip .copy{order:2}
+  .tag{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;margin-bottom:10px}
+  .row h3,.mini h3{font-size:clamp(26px,3vw,34px);margin-bottom:12px}
+  .text{color:var(--mut);font-size:17px}
+  .points{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px}
+  .points li{position:relative;padding-left:22px;font-size:15.5px}
+  .points li::before{content:'';position:absolute;left:4px;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--mut);opacity:.55}
+  .more{display:inline-block;margin-top:20px;font-weight:700;text-decoration:none}
+  .more:hover{text-decoration:underline}
+
+  .minis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:clamp(56px,8vw,96px)}
+  .mini{background:var(--sf);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;scroll-margin-top:96px}
+  .mini h3{font-size:24px}
+  .mini .text{font-size:16px;margin-bottom:18px}
+  .mini :global(.screen){margin-top:auto}
+  kbd{font:600 12.5px ui-monospace,"JetBrains Mono",monospace;background:var(--bg);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px}
 
   .alt{background:var(--sf);border-block:1px solid var(--line)}
   .split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,72px);align-items:center}
@@ -148,6 +239,7 @@ obsess over quality.</pre>
   .checks{list-style:none;padding:0;margin:24px 0 0;display:grid;gap:10px}
   .checks li{position:relative;padding-left:30px}
   .checks li::before{content:'';position:absolute;left:0;top:4px;width:18px;height:18px;border-radius:50%;background:var(--acs) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5 5.5-6' fill='none' stroke='%231f6f78' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
+  @media (prefers-color-scheme:dark){.checks li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5 5.5-6' fill='none' stroke='%235cb8c2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}}
 
   .tree{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:20px;font-size:14.5px;min-width:0}
   .path{font:600 13px ui-monospace,"JetBrains Mono",monospace;color:var(--mut);margin-bottom:8px}
@@ -156,29 +248,31 @@ obsess over quality.</pre>
   .node code{font:600 13.5px ui-monospace,"JetBrains Mono",monospace;color:var(--ac)}
   .node span{color:var(--mut)}
   .md{margin:16px 0 0;background:var(--sf);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font:13px/1.6 ui-monospace,"JetBrains Mono",monospace;white-space:pre-wrap;overflow-x:auto}
-  .md .fm{color:var(--mut)}
-  .md .hd{color:var(--ink);font-weight:700}
+  .md .hd{font-weight:700}
+
+  .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+  .card{background:var(--sf);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .card h3{font:700 18px Figtree,sans-serif;letter-spacing:0;margin-bottom:8px}
+  .card p{color:var(--mut);font-size:15.5px}
+  .plans{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+  .plan{flex:1 1 160px;display:flex;align-items:baseline;gap:10px;background:var(--acs);border-radius:12px;padding:14px 18px}
+  .plan b{font-size:17px}
+  .plan span{font:600 14px ui-monospace,monospace;color:var(--ac)}
+  .plan em{margin-left:auto;font-style:normal;color:var(--mut);font-size:14px}
+  .note{color:var(--mut);margin-top:20px;font-size:15.5px}
 
   .plats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px}
-  .plat{display:flex;flex-direction:column;gap:4px;background:var(--sf);border:1px solid var(--line);border-radius:14px;padding:22px;color:var(--ink);text-decoration:none;transition:border-color .15s,transform .15s}
+  .plat{display:flex;flex-direction:column;gap:4px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:22px;color:var(--ink);text-decoration:none;transition:border-color .15s,transform .15s}
   .plat:hover{border-color:var(--ac);transform:translateY(-2px)}
   .pn{font:600 24px Literata,Georgia,serif}
   .pf{font:600 13px ui-monospace,monospace;color:var(--ac)}
   .pd{color:var(--mut);font-size:15px;margin-top:6px;flex:1}
   .go{margin-top:18px;font-weight:700;color:var(--ac)}
 
-  footer{border-top:1px solid var(--line);padding:28px 0 40px}
-  .foot{display:flex;gap:24px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
-  .fb{display:flex;align-items:center;gap:8px;font:700 17px Literata,Georgia,serif}
-  .fb img{border-radius:6px}
-  .credits{color:var(--mut);font-size:13.5px;max-width:620px}
-  .credits a{color:inherit}
-
   @media (max-width:900px){
-    .hero .wrap,.split{grid-template-columns:1fr}
-    .plats{grid-template-columns:1fr}
+    .row,.row.flip,.split{grid-template-columns:1fr}
+    .row.flip .copy{order:0}
+    .minis,.cards3,.plats{grid-template-columns:1fr}
   }
-  @media (max-width:480px){
-    .node{grid-template-columns:1fr;gap:0}
-  }
+  @media (max-width:480px){.node{grid-template-columns:1fr;gap:0}}
 </style>

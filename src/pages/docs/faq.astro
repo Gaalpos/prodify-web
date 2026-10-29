@@ -1,0 +1,53 @@
+---
+import Docs from '../../layouts/Docs.astro';
+import { faq } from '../../data/faq';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const html = (s: string) => s.replaceAll('{base}', base);
+const headings = faq.map((g) => ({ depth: 2, slug: slug(g.title), text: g.title }));
+const strip = (s: string) => s.replace(/<[^>]+>/g, '');
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.flatMap((g) => g.items).map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: strip(html(f.a)) } })),
+};
+---
+
+<Docs title="FAQ" description="Answers to common questions about Prodify: pricing, platforms, your data, privacy, sync and installing." current="faq" headings={headings}>
+  <h1>Frequently asked questions</h1>
+  <p class="lead">Can't find your answer? Browse the <a href={`${base}docs/`}>docs</a> or <a href="https://github.com/Gaalpos/prodify/issues">open an issue on GitHub</a>.</p>
+
+  {faq.map((g) => (
+    <section>
+      <h2 id={slug(g.title)}>{g.title}</h2>
+      <div class="qs">
+        {g.items.map((f) => (
+          <details id={slug(f.q)}>
+            <summary>{f.q}</summary>
+            <p set:html={html(f.a)} />
+          </details>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+</Docs>
+
+<script>
+  // Open the question a link points to.
+  const open = () => { const el = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1))); if (el instanceof HTMLDetailsElement) { el.open = true; el.scrollIntoView() } };
+  open(); addEventListener('hashchange', open);
+</script>
+
+<style>
+  .qs{display:flex;flex-direction:column;gap:8px}
+  details{background:var(--sf);border:1px solid var(--line);border-radius:12px;scroll-margin-top:88px}
+  details[open]{border-color:color-mix(in srgb,var(--ac) 45%,var(--line))}
+  summary{list-style:none;cursor:pointer;padding:14px 46px 14px 18px;font-weight:700;position:relative}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:'';position:absolute;right:18px;top:50%;width:9px;height:9px;border-right:2px solid var(--mut);border-bottom:2px solid var(--mut);transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+  details[open] summary::after{transform:translateY(-25%) rotate(-135deg)}
+  details p{margin:0;padding:0 18px 16px;color:var(--mut)}
+</style>
