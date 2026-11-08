@@ -83,14 +83,14 @@ const toc = headings.filter((h) => h.depth === 2);
   .prose{max-width:720px}
   .prose :global(h1){font-size:clamp(32px,4vw,42px);margin-bottom:12px}
   .prose :global(h2){font-size:26px;margin:44px 0 12px;scroll-margin-top:88px}
-  .prose :global(h3){font:700 18px Figtree,sans-serif;letter-spacing:0;margin:28px 0 8px;scroll-margin-top:88px}
+  .prose :global(h3){font:700 18px var(--font);letter-spacing:0;margin:28px 0 8px;scroll-margin-top:88px}
   .prose :global(p),.prose :global(ul),.prose :global(ol){margin:0 0 14px}
   .prose :global(li){margin:4px 0}
   .prose :global(.lead){color:var(--mut);font-size:19px;margin-bottom:28px}
-  .prose :global(code){font:13.5px ui-monospace,"JetBrains Mono",monospace;background:var(--acs);padding:1px 6px;border-radius:5px}
+  .prose :global(code){font:13.5px var(--font);background:var(--acs);padding:1px 6px;border-radius:5px}
   .prose :global(pre){background:var(--sf)!important;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
   .prose :global(pre code){background:none;padding:0;color:var(--ink)}
-  .prose :global(kbd){font:600 12.5px ui-monospace,"JetBrains Mono",monospace;background:var(--sf);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px}
+  .prose :global(kbd){font:600 12.5px var(--font);background:var(--sf);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px}
   .prose :global(table){width:100%;border-collapse:collapse;margin:0 0 18px;font-size:15px;display:block;overflow-x:auto}
   .prose :global(th),.prose :global(td){text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
   .prose :global(th){font-weight:700}
