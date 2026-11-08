@@ -30,10 +30,11 @@ Several people can use Prodify on one computer. Each user has their own data fol
 Prodify Cloud keeps your devices in sync.
 
 1. In setup or in **Settings → Account and data**, choose **Prodify Cloud**.
-2. Enter your email address and type the sign-in code you're sent. There's no separate cloud password.
-3. Your files are encrypted on your device with your account's key before they're uploaded. The server stores data it can't read.
+2. Enter your email and password. New to Prodify Cloud, or forgot your password? Choose **Email me a code** and type the code you're sent.
+3. If you turned on **two-step verification**, also enter the 6-digit code from your authenticator app, or one of your backup codes.
+4. Your files are encrypted on your device with your account's key before they're uploaded. The server stores data it can't read.
 
-Sign in on another device with the same account to sync it. Signing out stops syncing on that device; your data stays both there and in the cloud.
+Sign in on another device, or in the [web app](../install/#web-app), with the same account to sync it. Your Cloud password is your account password: the same one that unlocks your encrypted data. Signing out stops syncing on that device; your data stays both there and in the cloud.
 
 ### Plans
 

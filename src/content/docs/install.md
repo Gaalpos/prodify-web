@@ -7,7 +7,7 @@ order: 1
 
 # Install Prodify
 
-<p class="lead">Prodify is free and runs on Linux, Windows and Android. Every release is on GitHub.</p>
+<p class="lead">Prodify is free and runs on Linux, Windows, Android and in your browser. Every release is on GitHub.</p>
 
 Open the [latest release](https://github.com/Gaalpos/prodify/releases/latest) and download the file for your system.
 
@@ -16,6 +16,15 @@ Open the [latest release](https://github.com/Gaalpos/prodify/releases/latest) an
 | Linux | `Prodify_<version>_amd64.deb` | Ubuntu, Linux Mint, Debian and other Debian-based systems |
 | Windows | `Prodify_<version>_x64-setup.exe` | Windows 10 and 11 |
 | Android | `Prodify_<version>_arm64.apk` | 64-bit ARM phones and tablets |
+
+## Web app
+
+Nothing to install: open the [web app](/prodify-web/app/) in any modern browser, on a computer, phone or tablet. Setup runs on your first visit.
+
+- **Your data stays in that browser.** Clearing the browser's site data for the web app deletes it.
+- **Sign in to Prodify Cloud** to keep a copy and sync it with the desktop and phone apps. Your files are encrypted in the browser before they're uploaded.
+- **Some things need the desktop or phone app**: choosing a data folder, backups to a second drive, Steam and RetroAchievements imports, and AI.
+- **Keep it handy**: use your browser's *Install app* or *Add to Home Screen* option, or bookmark it.
 
 ## Linux
 

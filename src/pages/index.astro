@@ -16,6 +16,7 @@ const platforms = [
   { name: 'Linux', file: '.deb', note: 'Ubuntu, Linux Mint, Debian and friends' },
   { name: 'Windows', file: '.exe', note: 'Installer for Windows 10 and 11' },
   { name: 'Android', file: '.apk', note: 'Phones and tablets, arm64' },
+  { name: 'Web', file: 'in your browser', note: 'Nothing to install. Sign in to Prodify Cloud to sync with your other devices.', href: 'app/', go: 'Open the web app' },
 ];
 
 const tree = [
@@ -36,7 +37,7 @@ const tree = [
     <section class="hero">
       <div class="wrap">
         <div class="intro">
-          <p class="eyebrow">Free · Linux · Windows · Android</p>
+          <p class="eyebrow">Free · Web · Linux · Windows · Android</p>
           <h1>Your days, written down <em>in one calm place.</em></h1>
           <p class="lead">
             Prodify brings your notes, journal, tasks, projects, habits, health and collections into one app,
@@ -44,7 +45,7 @@ const tree = [
           </p>
           <div class="ctas">
             <a class="btn primary" href="#download">Download Prodify</a>
-            <a class="btn ghost" href={`${base}docs/`}>Read the docs</a>
+            <a class="btn ghost" href={`${base}app/`}>Open the web app</a>
           </div>
         </div>
         <div class="heroshot">
@@ -161,7 +162,7 @@ const tree = [
           </div>
           <div class="card">
             <h3>Prodify Cloud</h3>
-            <p>Sign in with a code sent to your email and keep your devices in sync. Files are encrypted on your device before they're uploaded, so the server only stores data it can't read.</p>
+            <p>Sign in with your email and password, on the desktop, your phone or the web app, and keep everything in sync. Two-step verification is optional. Files are encrypted on your device before they're uploaded, so the server only stores data it can't read.</p>
           </div>
           <div class="card">
             <h3>Several people, one computer</h3>
@@ -181,14 +182,14 @@ const tree = [
       <div class="wrap">
         <p class="eyebrow">Download</p>
         <h2>Get Prodify</h2>
-        <p class="lead">Free, and the same app on every platform. Grab the file for your system from the latest release on GitHub.</p>
+        <p class="lead">Free, and the same app everywhere. Download it for your system from the latest release on GitHub, or use it right away in your browser.</p>
         <div class="plats">
           {platforms.map((p) => (
-            <a class="plat" href={releases}>
+            <a class="plat" href={p.href ? `${base}${p.href}` : releases}>
               <span class="pn">{p.name}</span>
               <span class="pf">{p.file}</span>
               <span class="pd">{p.note}</span>
-              <span class="go">Download <span aria-hidden="true">→</span></span>
+              <span class="go">{p.go || 'Download'} <span aria-hidden="true">→</span></span>
             </a>
           ))}
         </div>
@@ -261,7 +262,7 @@ const tree = [
   .plan em{margin-left:auto;font-style:normal;color:var(--mut);font-size:14px}
   .note{color:var(--mut);margin-top:20px;font-size:15.5px}
 
-  .plats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px}
+  .plats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px}
   .plat{display:flex;flex-direction:column;gap:4px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:22px;color:var(--ink);text-decoration:none;transition:border-color .15s,transform .15s}
   .plat:hover{border-color:var(--ac);transform:translateY(-2px)}
   .pn{font:600 24px Literata,Georgia,serif}
@@ -272,7 +273,9 @@ const tree = [
   @media (max-width:900px){
     .row,.row.flip,.split{grid-template-columns:1fr}
     .row.flip .copy{order:0}
-    .minis,.cards3,.plats{grid-template-columns:1fr}
+    .minis,.cards3{grid-template-columns:1fr}
+    .plats{grid-template-columns:1fr 1fr}
   }
+  @media (max-width:560px){.plats{grid-template-columns:1fr}}
   @media (max-width:480px){.node{grid-template-columns:1fr;gap:0}}
 </style>

@@ -1,0 +1,116 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const repo = 'https://github.com/Gaalpos/prodify';
+const newBug = `${repo}/issues/new?template=bug_report.yml`;
+const newIdea = `${repo}/issues/new?template=feature_request.yml`;
+
+// Each list is a GitHub search, run in the visitor's browser so it's always current.
+const lists = [
+  { id: 'ideas', title: 'Most-wanted ideas', note: 'Open requests, most 👍 first.', q: 'label:enhancement is:open', sort: 'reactions-+1', empty: 'No open requests yet. Yours could be the first.' },
+  { id: 'bugs', title: 'Known bugs', note: 'Open reports, newest activity first.', q: 'label:bug is:open', sort: 'updated', empty: 'No open bug reports right now.' },
+  { id: 'done', title: 'Recently shipped', note: 'Requests and fixes that made it in.', q: 'is:closed reason:completed', sort: 'updated', empty: 'Nothing closed yet.' },
+];
+---
+
+<Base title="Feedback · Prodify" description="Report a bug or request a feature for Prodify, and see what others have asked for.">
+  <Header />
+  <main class="wrap page">
+    <p class="eyebrow">Feedback</p>
+    <h1>Help shape Prodify</h1>
+    <p class="lead">Found something broken, or missing something you'd use every day? Tell us. Every report and idea is read, and the ideas with the most 👍 are looked at first.</p>
+
+    <div class="actions">
+      <a class="act" id="bug" href={newBug}>
+        <span class="dot" style="background:#d4605a"></span>
+        <b>Report a bug</b>
+        <span>Something doesn't work the way it should. Tell us what happened and how to make it happen again.</span>
+        <em>Open the bug form <span aria-hidden="true">→</span></em>
+      </a>
+      <a class="act" id="feature" href={newIdea}>
+        <span class="dot" style="background:#5fa57f"></span>
+        <b>Request a feature</b>
+        <span>An idea that would make Prodify better for you. Check the list below first, and 👍 an idea that's already there.</span>
+        <em>Open the idea form <span aria-hidden="true">→</span></em>
+      </a>
+    </div>
+    <p class="fine">
+      The forms are on GitHub, so you'll need a free GitHub account. Reports are public: leave out private notes, passwords and recovery keys.
+      Have a question instead? The <a href={`${base}docs/faq/`}>FAQ</a> may already answer it.
+    </p>
+
+    <div class="lists">
+      {lists.map((l) => (
+        <section class="list" data-q={l.q} data-sort={l.sort} data-empty={l.empty} aria-labelledby={`h-${l.id}`}>
+          <h2 id={`h-${l.id}`}>{l.title}</h2>
+          <p class="note">{l.note}</p>
+          <ul aria-live="polite"><li class="msg">Loading…</li></ul>
+          <a class="all" href={`${repo}/issues?q=${encodeURIComponent('is:issue ' + l.q)}`}>See all on GitHub <span aria-hidden="true">→</span></a>
+        </section>
+      ))}
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<script>
+  const REPO = 'Gaalpos/prodify';
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  const clean = (t: string) => t.replace(/^\[(bug|idea)\]\s*/i, '');
+  const ago = (iso: string) => {
+    const d = Math.round((Date.now() - Date.parse(iso)) / 864e5);
+    return d < 1 ? 'today' : d === 1 ? 'yesterday' : d < 30 ? `${d} days ago` : new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+  interface Issue { html_url: string; number: number; title: string; comments: number; updated_at: string; reactions?: { '+1': number }; labels: { name: string }[] }
+
+  for (const box of document.querySelectorAll<HTMLElement>('.list')) {
+    const ul = box.querySelector('ul')!;
+    const q = `repo:${REPO} is:issue ${box.dataset.q}`;
+    const url = `https://api.github.com/search/issues?q=${encodeURIComponent(q)}&sort=${encodeURIComponent(box.dataset.sort!)}&order=desc&per_page=8`;
+    fetch(url, { headers: { accept: 'application/vnd.github+json' } })
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((d: { items: Issue[] }) => {
+        if (!d.items.length) { ul.innerHTML = `<li class="msg">${esc(box.dataset.empty!)}</li>`; return; }
+        ul.innerHTML = d.items.map((i) => {
+          const kind = i.labels.some((l) => l.name === 'bug') ? 'Bug' : i.labels.some((l) => l.name === 'enhancement') ? 'Idea' : '';
+          const votes = i.reactions?.['+1'] || 0;
+          return `<li><a href="${esc(i.html_url)}"><b>${esc(clean(i.title))}</b><span class="meta">#${i.number}${kind ? ` · ${kind}` : ''} · ${ago(i.updated_at)}${i.comments ? ` · ${i.comments} comment${i.comments > 1 ? 's' : ''}` : ''}</span></a><span class="votes" title="${votes} 👍">👍 ${votes}</span></li>`;
+        }).join('');
+      })
+      .catch(() => { ul.innerHTML = '<li class="msg">Couldn\'t load the list right now. Use the link below to see it on GitHub.</li>'; });
+  }
+</script>
+
+<style>
+  .page{padding-top:clamp(40px,6vw,72px);padding-bottom:72px}
+  h1{font-size:clamp(36px,5vw,52px);margin-bottom:14px}
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px}
+  .act{display:flex;flex-direction:column;gap:8px;background:var(--sf);border:1px solid var(--line);border-radius:16px;padding:24px;color:var(--ink);text-decoration:none;scroll-margin-top:96px;transition:border-color .15s,transform .15s}
+  .act:hover{border-color:var(--ac);transform:translateY(-2px)}
+  .act:target{border-color:var(--ac)}
+  .act b{font:600 26px Literata,Georgia,serif}
+  .act span:not(.dot){color:var(--mut)}
+  .act em{font-style:normal;font-weight:700;color:var(--ac);margin-top:auto;padding-top:10px}
+  .fine{color:var(--mut);font-size:15px;margin-top:16px;max-width:760px}
+
+  .lists{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:56px}
+  .list{background:var(--sf);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column}
+  .list h2{font-size:22px}
+  .note{color:var(--mut);font-size:14.5px;margin:4px 0 10px}
+  .list ul{list-style:none;padding:0;margin:0 0 12px;flex:1}
+  .list :global(li){display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+  .list :global(li:first-child){border-top:0}
+  .list :global(li a){flex:1;min-width:0;color:var(--ink);text-decoration:none}
+  .list :global(li a:hover b){color:var(--ac)}
+  .list :global(li b){display:block;font-weight:600;font-size:15.5px;line-height:1.4}
+  .list :global(.meta){display:block;color:var(--mut);font-size:13px;margin-top:2px}
+  .list :global(.votes){flex:none;font-size:13px;font-weight:600;color:var(--mut);background:var(--bg);border-radius:999px;padding:2px 9px}
+  .list :global(.msg){color:var(--mut);font-size:15px}
+  .all{font-weight:700;text-decoration:none;font-size:15px}
+  .all:hover{text-decoration:underline}
+
+  @media (max-width:900px){.actions,.lists{grid-template-columns:1fr}}
+</style>

@@ -14,7 +14,8 @@ const inDocs = path.startsWith(`${base}docs`);
       <a href={`${base}#sections`} class="hide-sm">Sections</a>
       <a href={`${base}#privacy`} class="hide-sm">Privacy</a>
       <a href={`${base}docs/`} aria-current={inDocs ? 'page' : undefined}>Docs</a>
-      <a href={`${base}docs/faq/`} class="hide-sm" aria-current={path.startsWith(`${base}docs/faq`) ? 'page' : undefined}>FAQ</a>
+      <a href={`${base}feedback/`} class="hide-sm" aria-current={path.startsWith(`${base}feedback`) ? 'page' : undefined}>Feedback</a>
+      <a href={`${base}app/`} class="web">Open web app</a>
       <a href={`${base}#download`} class="cta">Download</a>
     </nav>
   </div>
@@ -30,5 +31,7 @@ const inDocs = path.startsWith(`${base}docs`);
   nav a:hover,nav a[aria-current="page"]{color:var(--ink);background:var(--acs)}
   nav a.cta{color:var(--onac);background:var(--ac);font-weight:700;margin-left:6px}
   nav a.cta:hover{background:color-mix(in srgb,var(--ac) 88%,var(--ink))}
-  @media (max-width:640px){nav .hide-sm{display:none}}
+  nav a.web{color:var(--ac);font-weight:700}
+  @media (max-width:820px){nav .hide-sm{display:none}}
+  @media (max-width:420px){nav a.web{display:none}}
 </style>
