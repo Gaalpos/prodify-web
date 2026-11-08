@@ -1,12 +1,10 @@
 name: Deploy to GitHub Pages
 
-# The site is rebuilt on every push, by hand, and once a day so the web app picks up new app commits on main.
+# The web app, downloads and feedback board are served by Prodify Cloud, so this only builds the website.
 on:
   push:
     branches: [main]
   workflow_dispatch:
-  schedule:
-    - cron: '17 4 * * *'
 
 permissions:
   contents: read
@@ -22,26 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check out the app
-        uses: actions/checkout@v4
-        with:
-          repository: Gaalpos/prodify
-          ref: main
-          path: _app
-          sparse-checkout: |
-            src
-            package.json
-          sparse-checkout-cone-mode: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
       - run: npm ci
       - run: npm run build
-      - name: Add the web app
-        run: node scripts/add-app.mjs
-        env:
-          APP_SRC: _app/src
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

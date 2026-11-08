@@ -7,9 +7,9 @@ order: 1
 
 # Install Prodify
 
-<p class="lead">Prodify is free and runs on Linux, Windows, Android and in your browser. Every release is on GitHub.</p>
+<p class="lead">Prodify is free and runs on Linux, Windows, Android and in your browser. </p>
 
-Open the [latest release](https://github.com/Gaalpos/prodify/releases/latest) and download the file for your system.
+Download the file for your system: [Linux](https://prodify-cloud.gaalpos.workers.dev/download/linux), [Windows](https://prodify-cloud.gaalpos.workers.dev/download/windows) or [Android](https://prodify-cloud.gaalpos.workers.dev/download/android). Each link always gets the latest version.
 
 | System | File | Notes |
 | --- | --- | --- |
@@ -19,7 +19,7 @@ Open the [latest release](https://github.com/Gaalpos/prodify/releases/latest) an
 
 ## Web app
 
-Nothing to install: open the [web app](/prodify-web/app/) in any modern browser, on a computer, phone or tablet. Setup runs on your first visit.
+Nothing to install: open the [web app](https://prodify-cloud.gaalpos.workers.dev/app/) in any modern browser, on a computer, phone or tablet. Setup runs on your first visit.
 
 - **Your data stays in that browser.** Clearing the browser's site data for the web app deletes it.
 - **Sign in to Prodify Cloud** to keep a copy and sync it with the desktop and phone apps. Your files are encrypted in the browser before they're uploaded.

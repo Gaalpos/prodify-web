@@ -32,9 +32,9 @@ const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.
         <b>FAQ</b>
         <span>Quick answers about pricing, platforms, your data, privacy, sync and installing.</span>
       </a>
-      <a class="card" href="https://github.com/Gaalpos/prodify/issues">
+      <a class="card" href={`${base}feedback/`}>
         <b>Report a problem</b>
-        <span>Found a bug or missing something? Open an issue on GitHub.</span>
+        <span>Found a bug or missing something? Tell us on the feedback page.</span>
       </a>
     </div>
   </section>

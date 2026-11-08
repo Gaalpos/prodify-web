@@ -7,8 +7,8 @@ export const faq: FaqGroup[] = [
     title: 'The basics',
     items: [
       { q: 'Is Prodify free?', a: 'Yes. Prodify is free to download and use, and a local account is free forever. Only bigger Prodify Cloud plans (Basic and Pro, coming soon) will cost money; the Free cloud plan with 100 MB is included.' },
-      { q: 'Which systems does it run on?', a: 'Linux (a <code>.deb</code> for Ubuntu, Linux Mint, Debian and similar), Windows 10 and 11 (an <code>.exe</code> installer), Android (an <code>.apk</code> for 64-bit ARM phones and tablets), and any modern browser with the <a href="{base}app/">web app</a>. See <a href="{base}docs/install/">Install Prodify</a>.' },
-      { q: 'Is there an iPhone or Mac version?', a: 'Not as an app yet, but the <a href="{base}app/">web app</a> runs in Safari on iPhone, iPad and Mac. Sign in to Prodify Cloud there to sync with your other devices.' },
+      { q: 'Which systems does it run on?', a: 'Linux (a <code>.deb</code> for Ubuntu, Linux Mint, Debian and similar), Windows 10 and 11 (an <code>.exe</code> installer), Android (an <code>.apk</code> for 64-bit ARM phones and tablets), and any modern browser with the <a href="https://prodify-cloud.gaalpos.workers.dev/app/">web app</a>. See <a href="{base}docs/install/">Install Prodify</a>.' },
+      { q: 'Is there an iPhone or Mac version?', a: 'Not as an app yet, but the <a href="https://prodify-cloud.gaalpos.workers.dev/app/">web app</a> runs in Safari on iPhone, iPad and Mac. Sign in to Prodify Cloud there to sync with your other devices.' },
       { q: 'What\'s the difference between the web app and the downloads?', a: 'It\'s the same app. The web app keeps your data inside the browser instead of a folder of files, and a few things need the desktop or phone app: choosing a data folder, backups to a second drive, Steam and RetroAchievements imports, and AI. Sign in to Prodify Cloud to keep a copy of your web data and use it everywhere. See <a href="{base}docs/install/#web-app">Web app</a>.' },
       { q: 'Is my data safe if I clear my browser?', a: 'Clearing site data for the web app deletes what\'s stored in that browser. If you\'re signed in to Prodify Cloud, sign in again and everything comes back. Without Cloud, export a copy first from Settings → Account and data.' },
       { q: 'Do I need an account?', a: 'No. The default is a local account with no sign-up: everything stays on your device and works offline. You only need an email address if you want Prodify Cloud to sync devices.' },
@@ -51,10 +51,10 @@ export const faq: FaqGroup[] = [
   {
     title: 'Installing and updating',
     items: [
-      { q: 'Windows says the installer is unrecognized. Is it safe?', a: 'The installer isn\'t code-signed yet, so SmartScreen warns about it. Make sure you downloaded it from the official <a href="https://github.com/Gaalpos/prodify/releases">GitHub releases</a>, then choose More info → Run anyway.' },
+      { q: 'Windows says the installer is unrecognized. Is it safe?', a: 'The installer isn\'t code-signed yet, so SmartScreen warns about it. Make sure you downloaded it from the Download buttons on this site, then choose More info → Run anyway.' },
       { q: 'How do I install the .apk on Android?', a: 'Open the downloaded file and allow installs from your browser or file manager when Android asks, then tap Install.' },
       { q: 'How do I update?', a: 'Download the new release and install it over the old one. Your data isn\'t touched. On Android every release is signed with the same key, so it installs as an update.' },
-      { q: 'Is Prodify open source?', a: 'The source code is public on <a href="https://github.com/Gaalpos/prodify">GitHub</a>.' },
+      { q: 'Where do I report a bug or suggest a feature?', a: 'On the <a href="{base}feedback/">feedback page</a>. No account needed: write it in the form, and add an email if you\'d like a reply. You can also 👍 ideas others have sent.' },
     ],
   },
 ];

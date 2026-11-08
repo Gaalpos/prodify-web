@@ -18,5 +18,6 @@ npm run build    # static site in dist/
 - `src/assets/screens/`: real app screenshots, light and dark, shown by `src/components/Screen.astro`
 - `src/fonts/`: Figtree and Literata, the same fonts the app bundles (OFL)
 - `.github/workflows/deploy.yml`: builds and publishes to GitHub Pages on every push to `main`
+- `src/data/site.ts`: the Prodify Cloud address. The server (in the app repo, `cloud/`) serves the web app at `/app/`, the downloads and the feedback board
 
 The screenshots are taken from the app itself with demo data, at 1440×900 (Home) and 960×720 (sections) at 2× scale.

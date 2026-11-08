@@ -2,115 +2,222 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { CLOUD } from '../data/site';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const repo = 'https://github.com/Gaalpos/prodify';
-const newBug = `${repo}/issues/new?template=bug_report.yml`;
-const newIdea = `${repo}/issues/new?template=feature_request.yml`;
+const sectionNames = ['Home', 'Notes', 'Journal', 'Tasks', 'Projects', 'Habits', 'Health', 'Collections', 'Calendar', 'Insights', 'Storage', 'Music', 'Settings', 'Prodify Cloud / sync', 'Setup', 'Something else'];
+const platforms = ['Linux', 'Windows', 'Android', 'Web app'];
 
-// Each list is a GitHub search, run in the visitor's browser so it's always current.
+// Each list asks the server for part of the board; the page fills them in.
 const lists = [
-  { id: 'ideas', title: 'Most-wanted ideas', note: 'Open requests, most 👍 first.', q: 'label:enhancement is:open', sort: 'reactions-+1', empty: 'No open requests yet. Yours could be the first.' },
-  { id: 'bugs', title: 'Known bugs', note: 'Open reports, newest activity first.', q: 'label:bug is:open', sort: 'updated', empty: 'No open bug reports right now.' },
-  { id: 'done', title: 'Recently shipped', note: 'Requests and fixes that made it in.', q: 'is:closed reason:completed', sort: 'updated', empty: 'Nothing closed yet.' },
+  { id: 'ideas', title: 'Most-wanted ideas', note: 'Open and planned ideas, most 👍 first.', q: 'kind=idea&status=open,planned&sort=votes', empty: 'No ideas yet. Yours could be the first.', vote: true },
+  { id: 'bugs', title: 'Known bugs', note: 'Open reports, newest first.', q: 'kind=bug&status=open,planned&sort=new', empty: 'No open bug reports right now.', vote: true },
+  { id: 'done', title: 'Recently shipped', note: 'Ideas and fixes that made it in.', q: 'status=done&sort=new', empty: 'Nothing shipped from the board yet.', vote: false },
 ];
 ---
 
-<Base title="Feedback · Prodify" description="Report a bug or request a feature for Prodify, and see what others have asked for.">
+<Base title="Feedback · Prodify" description="Report a bug or request a feature for Prodify, and vote for the ideas you want most.">
   <Header />
-  <main class="wrap page">
+  <main class="wrap page" data-cloud={CLOUD}>
     <p class="eyebrow">Feedback</p>
     <h1>Help shape Prodify</h1>
     <p class="lead">Found something broken, or missing something you'd use every day? Tell us. Every report and idea is read, and the ideas with the most 👍 are looked at first.</p>
 
-    <div class="actions">
-      <a class="act" id="bug" href={newBug}>
-        <span class="dot" style="background:#d4605a"></span>
-        <b>Report a bug</b>
-        <span>Something doesn't work the way it should. Tell us what happened and how to make it happen again.</span>
-        <em>Open the bug form <span aria-hidden="true">→</span></em>
-      </a>
-      <a class="act" id="feature" href={newIdea}>
-        <span class="dot" style="background:#5fa57f"></span>
-        <b>Request a feature</b>
-        <span>An idea that would make Prodify better for you. Check the list below first, and 👍 an idea that's already there.</span>
-        <em>Open the idea form <span aria-hidden="true">→</span></em>
-      </a>
-    </div>
-    <p class="fine">
-      The forms are on GitHub, so you'll need a free GitHub account. Reports are public: leave out private notes, passwords and recovery keys.
-      Have a question instead? The <a href={`${base}docs/faq/`}>FAQ</a> may already answer it.
-    </p>
+    <div class="grid">
+      <form class="form" id="form" novalidate>
+        <div class="kinds" role="radiogroup" aria-label="What would you like to send?">
+          <label id="bug"><input type="radio" name="kind" value="bug" /><span><span class="dot" style="background:#d4605a"></span>Report a bug</span></label>
+          <label id="feature"><input type="radio" name="kind" value="idea" checked /><span><span class="dot" style="background:#5fa57f"></span>Request a feature</span></label>
+        </div>
 
-    <div class="lists">
-      {lists.map((l) => (
-        <section class="list" data-q={l.q} data-sort={l.sort} data-empty={l.empty} aria-labelledby={`h-${l.id}`}>
-          <h2 id={`h-${l.id}`}>{l.title}</h2>
-          <p class="note">{l.note}</p>
-          <ul aria-live="polite"><li class="msg">Loading…</li></ul>
-          <a class="all" href={`${repo}/issues?q=${encodeURIComponent('is:issue ' + l.q)}`}>See all on GitHub <span aria-hidden="true">→</span></a>
-        </section>
-      ))}
+        <label class="f">
+          <span class="l">Title</span>
+          <input name="title" maxlength="140" required autocomplete="off" />
+        </label>
+        <label class="f">
+          <span class="l" data-bug="What happened, and how can we make it happen again?" data-idea="What would you like to do, and how could it work?">What would you like to do, and how could it work?</span>
+          <textarea name="body" rows="6" maxlength="5000" required></textarea>
+        </label>
+
+        <fieldset class="f">
+          <legend class="l">Where do you use Prodify?</legend>
+          <div class="checks">
+            {platforms.map((p) => <label><input type="checkbox" name="platform" value={p} />{p}</label>)}
+          </div>
+        </fieldset>
+
+        <div class="row2">
+          <label class="f">
+            <span class="l">Section</span>
+            <select name="section">
+              <option value="">Choose…</option>
+              {sectionNames.map((s) => <option>{s}</option>)}
+            </select>
+          </label>
+          <label class="f">
+            <span class="l">Version <em>(bottom of Settings)</em></span>
+            <input name="version" maxlength="20" placeholder="1.18.3" autocomplete="off" />
+          </label>
+        </div>
+
+        <label class="f">
+          <span class="l">Email <em>(optional, only if you'd like a reply; never shown)</em></span>
+          <input name="email" type="email" maxlength="254" autocomplete="email" />
+        </label>
+        <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+
+        <p class="fine">Titles and descriptions are shown on this page so others can vote. Please leave out private notes, passwords and recovery keys.</p>
+        <div class="send">
+          <button class="btn primary" type="submit">Send</button>
+          <p class="status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+
+      <div class="lists">
+        {lists.map((l) => (
+          <section class="list" data-q={l.q} data-empty={l.empty} data-vote={l.vote ? '1' : ''} aria-labelledby={`h-${l.id}`}>
+            <h2 id={`h-${l.id}`}>{l.title}</h2>
+            <p class="note">{l.note}</p>
+            <ul aria-live="polite"><li class="msg">Loading…</li></ul>
+          </section>
+        ))}
+        <p class="fine">Have a question instead? The <a href={`${base}docs/faq/`}>FAQ</a> may already answer it.</p>
+      </div>
     </div>
   </main>
   <Footer />
 </Base>
 
 <script>
-  const REPO = 'Gaalpos/prodify';
+  const CLOUD = document.querySelector<HTMLElement>('main')!.dataset.cloud!;
   const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-  const clean = (t: string) => t.replace(/^\[(bug|idea)\]\s*/i, '');
-  const ago = (iso: string) => {
-    const d = Math.round((Date.now() - Date.parse(iso)) / 864e5);
-    return d < 1 ? 'today' : d === 1 ? 'yesterday' : d < 30 ? `${d} days ago` : new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const ago = (t: number) => {
+    const d = Math.round((Date.now() - t) / 864e5);
+    return d < 1 ? 'today' : d === 1 ? 'yesterday' : d < 30 ? `${d} days ago` : new Date(t).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   };
-  interface Issue { html_url: string; number: number; title: string; comments: number; updated_at: string; reactions?: { '+1': number }; labels: { name: string }[] }
+  // Which items this browser has voted for, so the buttons show it (the server counts one vote per person).
+  const voted = new Set<number>((() => { try { return JSON.parse(localStorage.getItem('prodify.votes') || '[]') } catch { return [] } })());
+  const saveVotes = () => { try { localStorage.setItem('prodify.votes', JSON.stringify([...voted])) } catch {} };
+  interface Item { id: number; kind: string; title: string; body: string; status: string; votes: number; updated: number; section: string }
 
-  for (const box of document.querySelectorAll<HTMLElement>('.list')) {
+  const row = (i: Item, canVote: boolean) => `<li data-id="${i.id}">
+    <details><summary><b>${esc(i.title)}</b><span class="meta">#${i.id} · ${i.kind === 'bug' ? 'Bug' : 'Idea'}${i.status === 'planned' ? ' · <span class="planned">Planned</span>' : ''}${i.section ? ' · ' + esc(i.section) : ''} · ${ago(i.updated)}</span></summary><p class="body">${esc(i.body)}</p></details>
+    ${canVote ? `<button class="vote${voted.has(i.id) ? ' on' : ''}" type="button" aria-pressed="${voted.has(i.id)}" aria-label="Vote for this (${i.votes} votes)">👍 <span>${i.votes}</span></button>` : `<span class="vote static">👍 ${i.votes}</span>`}
+  </li>`;
+
+  // fresh skips the browser's short cache, so something just sent shows up straight away.
+  function load(box: HTMLElement, fresh = false) {
     const ul = box.querySelector('ul')!;
-    const q = `repo:${REPO} is:issue ${box.dataset.q}`;
-    const url = `https://api.github.com/search/issues?q=${encodeURIComponent(q)}&sort=${encodeURIComponent(box.dataset.sort!)}&order=desc&per_page=8`;
-    fetch(url, { headers: { accept: 'application/vnd.github+json' } })
+    fetch(`${CLOUD}/feedback?${box.dataset.q}&limit=10`, fresh ? { cache: 'reload' } : {})
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((d: { items: Issue[] }) => {
-        if (!d.items.length) { ul.innerHTML = `<li class="msg">${esc(box.dataset.empty!)}</li>`; return; }
-        ul.innerHTML = d.items.map((i) => {
-          const kind = i.labels.some((l) => l.name === 'bug') ? 'Bug' : i.labels.some((l) => l.name === 'enhancement') ? 'Idea' : '';
-          const votes = i.reactions?.['+1'] || 0;
-          return `<li><a href="${esc(i.html_url)}"><b>${esc(clean(i.title))}</b><span class="meta">#${i.number}${kind ? ` · ${kind}` : ''} · ${ago(i.updated_at)}${i.comments ? ` · ${i.comments} comment${i.comments > 1 ? 's' : ''}` : ''}</span></a><span class="votes" title="${votes} 👍">👍 ${votes}</span></li>`;
-        }).join('');
+      .then((d: { items: Item[] }) => {
+        ul.innerHTML = d.items.length ? d.items.map((i) => row(i, !!box.dataset.vote)).join('') : `<li class="msg">${esc(box.dataset.empty!)}</li>`;
       })
-      .catch(() => { ul.innerHTML = '<li class="msg">Couldn\'t load the list right now. Use the link below to see it on GitHub.</li>'; });
+      .catch(() => { ul.innerHTML = '<li class="msg">Couldn’t load this list right now. Please try again later.</li>'; });
   }
+  const boxes = [...document.querySelectorAll<HTMLElement>('.list')];
+  boxes.forEach((b) => load(b));
+
+  document.addEventListener('click', async (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button.vote');
+    if (!b) return;
+    const id = +b.closest<HTMLElement>('li')!.dataset.id!;
+    b.disabled = true;
+    try {
+      const r = await fetch(`${CLOUD}/feedback/${id}/vote`, { method: 'POST' });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error);
+      d.voted ? voted.add(id) : voted.delete(id); saveVotes();
+      b.classList.toggle('on', d.voted); b.setAttribute('aria-pressed', String(d.voted)); b.querySelector('span')!.textContent = String(d.votes);
+    } catch { /* leave it as it was */ }
+    b.disabled = false;
+  });
+
+  // The form: a bug report or an idea. #bug and #feature links (from the app) pick the kind.
+  const form = document.getElementById('form') as HTMLFormElement, status = form.querySelector<HTMLElement>('.status')!;
+  const bodyLabel = form.querySelector<HTMLElement>('[data-bug]')!;
+  const setKind = (k: string) => {
+    form.querySelector<HTMLInputElement>(`input[name="kind"][value="${k}"]`)!.checked = true;
+    bodyLabel.textContent = bodyLabel.dataset[k === 'bug' ? 'bug' : 'idea']!;
+  };
+  if (location.hash === '#bug') setKind('bug');
+  form.addEventListener('change', (e) => { const t = e.target as HTMLInputElement; if (t.name === 'kind') setKind(t.value); });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = new FormData(form), btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    const data = {
+      kind: f.get('kind'), title: f.get('title'), body: f.get('body'), platform: f.getAll('platform').join(', '),
+      section: f.get('section'), version: f.get('version'), email: f.get('email'), website: f.get('website'),
+    };
+    btn.disabled = true; status.className = 'status'; status.textContent = 'Sending…';
+    try {
+      const r = await fetch(`${CLOUD}/feedback`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || 'Something went wrong');
+      status.className = 'status ok';
+      status.textContent = data.kind === 'bug' ? 'Thanks! Your report was sent.' : 'Thanks! Your idea is on the board.';
+      const kind = String(data.kind);
+      form.reset(); setKind(kind);
+      boxes.forEach((b) => load(b, true));
+    } catch (err) {
+      status.className = 'status err';
+      status.textContent = (err as Error).message === 'Failed to fetch' ? 'Couldn’t reach the server. Check your connection and try again.' : (err as Error).message;
+    }
+    btn.disabled = false;
+  });
 </script>
 
 <style>
   .page{padding-top:clamp(40px,6vw,72px);padding-bottom:72px}
   h1{font-size:clamp(36px,5vw,52px);margin-bottom:14px}
-  .actions{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px}
-  .act{display:flex;flex-direction:column;gap:8px;background:var(--sf);border:1px solid var(--line);border-radius:16px;padding:24px;color:var(--ink);text-decoration:none;scroll-margin-top:96px;transition:border-color .15s,transform .15s}
-  .act:hover{border-color:var(--ac);transform:translateY(-2px)}
-  .act:target{border-color:var(--ac)}
-  .act b{font:600 26px Literata,Georgia,serif}
-  .act span:not(.dot){color:var(--mut)}
-  .act em{font-style:normal;font-weight:700;color:var(--ac);margin-top:auto;padding-top:10px}
-  .fine{color:var(--mut);font-size:15px;margin-top:16px;max-width:760px}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;margin-top:36px;align-items:start}
 
-  .lists{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:56px}
-  .list{background:var(--sf);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column}
+  .form{background:var(--sf);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:16px}
+  .kinds{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:var(--bg);border-radius:12px;padding:4px}
+  .kinds label{position:relative;cursor:pointer;scroll-margin-top:96px}
+  .kinds input{position:absolute;opacity:0;pointer-events:none}
+  .kinds label>span{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border-radius:9px;font-weight:700;color:var(--mut)}
+  .kinds input:checked+span{background:var(--sf);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .kinds input:focus-visible+span{outline:2px solid var(--ac);outline-offset:2px}
+  .f{display:flex;flex-direction:column;gap:6px;border:0;padding:0;margin:0;min-width:0}
+  .l{font-weight:700;font-size:15px;padding:0}
+  .l em{font-style:normal;font-weight:400;color:var(--mut)}
+  .f input,.f textarea,.f select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+  .f textarea{resize:vertical;min-height:130px}
+  .f input:focus,.f textarea:focus,.f select:focus{outline:2px solid var(--ac);outline-offset:1px;border-color:transparent}
+  .checks{display:flex;flex-wrap:wrap;gap:8px 18px}
+  .checks label{display:flex;align-items:center;gap:8px;cursor:pointer}
+  .checks input{width:18px;height:18px;accent-color:var(--ac)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .fine{color:var(--mut);font-size:14.5px}
+  .send{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .send .btn:disabled{opacity:.6;cursor:default}
+  .status{font-size:15px;color:var(--mut)}
+  .status.ok{color:#3f8f63}
+  .status.err{color:#c44a4a}
+
+  .lists{display:flex;flex-direction:column;gap:16px}
+  .list{background:var(--sf);border:1px solid var(--line);border-radius:16px;padding:20px}
   .list h2{font-size:22px}
-  .note{color:var(--mut);font-size:14.5px;margin:4px 0 10px}
-  .list ul{list-style:none;padding:0;margin:0 0 12px;flex:1}
+  .note{color:var(--mut);font-size:14.5px;margin:4px 0 8px}
+  .list ul{list-style:none;padding:0;margin:0}
   .list :global(li){display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
   .list :global(li:first-child){border-top:0}
-  .list :global(li a){flex:1;min-width:0;color:var(--ink);text-decoration:none}
-  .list :global(li a:hover b){color:var(--ac)}
-  .list :global(li b){display:block;font-weight:600;font-size:15.5px;line-height:1.4}
+  .list :global(details){flex:1;min-width:0}
+  .list :global(summary){list-style:none;cursor:pointer}
+  .list :global(summary::-webkit-details-marker){display:none}
+  .list :global(summary b){display:block;font-weight:600;font-size:15.5px;line-height:1.4}
+  .list :global(summary:hover b){color:var(--ac)}
   .list :global(.meta){display:block;color:var(--mut);font-size:13px;margin-top:2px}
-  .list :global(.votes){flex:none;font-size:13px;font-weight:600;color:var(--mut);background:var(--bg);border-radius:999px;padding:2px 9px}
+  .list :global(.planned){color:var(--ac);font-weight:700}
+  .list :global(.body){margin:8px 0 2px;color:var(--mut);font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .list :global(.vote){flex:none;font:inherit;font-size:13px;font-weight:700;color:var(--mut);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 10px;cursor:pointer}
+  .list :global(.vote:hover){border-color:var(--mut)}
+  .list :global(.vote.on){color:var(--ac);border-color:var(--ac);background:var(--acs)}
+  .list :global(.vote.static){cursor:default;border-color:transparent}
   .list :global(.msg){color:var(--mut);font-size:15px}
-  .all{font-weight:700;text-decoration:none;font-size:15px}
-  .all:hover{text-decoration:underline}
 
-  @media (max-width:900px){.actions,.lists{grid-template-columns:1fr}}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  @media (max-width:480px){.row2{grid-template-columns:1fr}}
 </style>

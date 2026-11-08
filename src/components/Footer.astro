@@ -1,4 +1,5 @@
 ---
+import { APP_URL } from '../data/site';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 
@@ -11,10 +12,9 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     <nav class="links" aria-label="Footer">
       <a href={`${base}docs/`}>Docs</a>
       <a href={`${base}docs/faq/`}>FAQ</a>
-      <a href={`${base}app/`}>Web app</a>
+      <a href={APP_URL}>Web app</a>
       <a href={`${base}feedback/`}>Feedback</a>
-      <a href="https://github.com/Gaalpos/prodify">GitHub</a>
-      <a href="https://github.com/Gaalpos/prodify/releases/latest">Releases</a>
+      <a href={`${base}#download`}>Download</a>
     </nav>
     <p class="credits">
       Exercise data from <a href="https://github.com/yuhonas/free-exercise-db">free-exercise-db</a> and <a href="https://wger.de">wger</a>.

@@ -4,19 +4,19 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Screen from '../components/Screen.astro';
 import { sections } from '../data/features';
+import { APP_URL, CLOUD, download } from '../data/site';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const releases = 'https://github.com/Gaalpos/prodify/releases/latest';
 
 // The big alternating rows; the rest go in the compact grid below them.
 const rows = sections.filter((s) => !['files', 'music'].includes(s.id));
 const more = sections.filter((s) => ['files', 'music'].includes(s.id));
 
 const platforms = [
-  { name: 'Linux', file: '.deb', note: 'Ubuntu, Linux Mint, Debian and friends' },
-  { name: 'Windows', file: '.exe', note: 'Installer for Windows 10 and 11' },
-  { name: 'Android', file: '.apk', note: 'Phones and tablets, arm64' },
-  { name: 'Web', file: 'in your browser', note: 'Nothing to install. Sign in to Prodify Cloud to sync with your other devices.', href: 'app/', go: 'Open the web app' },
+  { name: 'Linux', file: '.deb', note: 'Ubuntu, Linux Mint, Debian and friends', href: download('linux') },
+  { name: 'Windows', file: '.exe', note: 'Installer for Windows 10 and 11', href: download('windows') },
+  { name: 'Android', file: '.apk', note: 'Phones and tablets, arm64', href: download('android') },
+  { name: 'Web', file: 'in your browser', note: 'Nothing to install. Sign in to Prodify Cloud to sync with your other devices.', href: APP_URL, go: 'Open the web app' },
 ];
 
 const tree = [
@@ -45,7 +45,7 @@ const tree = [
           </p>
           <div class="ctas">
             <a class="btn primary" href="#download">Download Prodify</a>
-            <a class="btn ghost" href={`${base}app/`}>Open the web app</a>
+            <a class="btn ghost" href={APP_URL}>Open the web app</a>
           </div>
         </div>
         <div class="heroshot">
@@ -181,11 +181,11 @@ const tree = [
     <section class="block alt" id="download">
       <div class="wrap">
         <p class="eyebrow">Download</p>
-        <h2>Get Prodify</h2>
-        <p class="lead">Free, and the same app everywhere. Download it for your system from the latest release on GitHub, or use it right away in your browser.</p>
+        <h2>Get Prodify <span class="ver" data-cloud={CLOUD}></span></h2>
+        <p class="lead">Free, and the same app everywhere. Download it for your system, or use it right away in your browser.</p>
         <div class="plats">
           {platforms.map((p) => (
-            <a class="plat" href={p.href ? `${base}${p.href}` : releases}>
+            <a class="plat" href={p.href} data-platform={p.go ? undefined : p.name.toLowerCase()}>
               <span class="pn">{p.name}</span>
               <span class="pf">{p.file}</span>
               <span class="pd">{p.note}</span>
@@ -200,7 +200,21 @@ const tree = [
   <Footer />
 </Base>
 
+<script>
+  // Shows the current version and file sizes from the server, so the page never needs rebuilding for a release.
+  const el = document.querySelector<HTMLElement>('.ver');
+  if (el) fetch(el.dataset.cloud + '/releases/latest').then((r) => (r.ok ? r.json() : null)).then((rel) => {
+    if (!rel) return;
+    el.textContent = rel.version;
+    for (const f of rel.files as { platform: string; size: number }[]) {
+      const pd = document.querySelector(`.plat[data-platform="${f.platform}"] .pf`);
+      if (pd) pd.textContent += ` · ${(f.size / 1048576).toFixed(1)} MB`;
+    }
+  }).catch(() => {});
+</script>
+
 <style>
+  .ver{color:var(--ac)}
   .hero{padding:clamp(48px,7vw,88px) 0 clamp(56px,8vw,96px)}
   .intro{max-width:760px;margin:0 auto;text-align:center}
   .intro .lead{margin:0 auto}
