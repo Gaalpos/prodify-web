@@ -22,7 +22,7 @@ Download the file for your system: [Linux](https://prodify-cloud.gaalpos.workers
 Nothing to install: open the [web app](https://prodify-cloud.gaalpos.workers.dev/app/) in any modern browser, on a computer, phone or tablet. Setup runs on your first visit.
 
 - **Your data stays in that browser.** Clearing the browser's site data for the web app deletes it.
-- **Sign in to Prodify Cloud** to keep a copy and sync it with the desktop and phone apps. Your files are encrypted in the browser before they're uploaded.
+- **Sign in to Prodify Cloud** to keep a copy and sync it with the desktop and phone apps. Already have an account? [Log in](https://prodify-cloud.gaalpos.workers.dev/app/#login) goes straight to sign-in. Your files are encrypted in the browser before they're uploaded.
 - **Some things need the desktop or phone app**: choosing a data folder, backups to a second drive, Steam and RetroAchievements imports, and AI.
 - **Keep it handy**: use your browser's *Install app* or *Add to Home Screen* option, or bookmark it.
 

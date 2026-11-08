@@ -1,5 +1,5 @@
 ---
-import { APP_URL } from '../data/site';
+import { APP_URL, LOGIN_URL } from '../data/site';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 
@@ -12,7 +12,8 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     <nav class="links" aria-label="Footer">
       <a href={`${base}docs/`}>Docs</a>
       <a href={`${base}docs/faq/`}>FAQ</a>
-      <a href={APP_URL}>Web app</a>
+      <a href={APP_URL}>Try web app</a>
+      <a href={LOGIN_URL}>Log in</a>
       <a href={`${base}feedback/`}>Feedback</a>
       <a href={`${base}#download`}>Download</a>
     </nav>

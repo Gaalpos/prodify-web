@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Screen from '../components/Screen.astro';
 import { sections } from '../data/features';
-import { APP_URL, CLOUD, download } from '../data/site';
+import { APP_URL, CLOUD, LOGIN_URL, download } from '../data/site';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
@@ -16,7 +16,7 @@ const platforms = [
   { name: 'Linux', file: '.deb', note: 'Ubuntu, Linux Mint, Debian and friends', href: download('linux') },
   { name: 'Windows', file: '.exe', note: 'Installer for Windows 10 and 11', href: download('windows') },
   { name: 'Android', file: '.apk', note: 'Phones and tablets, arm64', href: download('android') },
-  { name: 'Web', file: 'in your browser', note: 'Nothing to install. Sign in to Prodify Cloud to sync with your other devices.', href: APP_URL, go: 'Open the web app' },
+  { name: 'Web', file: 'in your browser', note: 'Nothing to install. Sign in to Prodify Cloud to sync with your other devices.', href: APP_URL, go: 'Try the web app' },
 ];
 
 const tree = [
@@ -45,7 +45,7 @@ const tree = [
           </p>
           <div class="ctas">
             <a class="btn primary" href="#download">Download Prodify</a>
-            <a class="btn ghost" href={APP_URL}>Open the web app</a>
+            <a class="btn ghost" href={APP_URL}>Try the web app</a>
           </div>
         </div>
         <div class="heroshot">
@@ -193,6 +193,7 @@ const tree = [
             </a>
           ))}
         </div>
+        <p class="note">Already use Prodify Cloud? <a href={LOGIN_URL}>Log in to the web app</a> to open your synced notes in the browser.</p>
         <p class="note">Not sure how to install it? <a href={`${base}docs/install/`}>Follow the install guide</a>, or check the <a href={`${base}docs/faq/`}>FAQ</a>.</p>
       </div>
     </section>
