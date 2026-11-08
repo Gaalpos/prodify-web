@@ -8,7 +8,7 @@ color: '#5b9bd5'
 
 # A quick tour
 
-<p class="lead">Prodify is one app with twelve sections. Here's how to get around and make it yours.</p>
+<p class="lead">Prodify is one app with fifteen sections. Here's how to get around and make it yours.</p>
 
 ## Home
 

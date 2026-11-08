@@ -32,6 +32,8 @@ Prodify/
 │   └── moods.md      mood check-ins
 ├── projects/         one file per project
 ├── habits/           one file per habit
+├── hobbies/          one file per hobby, with its sessions
+├── skills/           one file per skill, with its practice log
 ├── health/           workouts, meditation and body log
 ├── collections/      book/, movie/, series/, anime/, game/
 ├── attachments/      photos, images and PDFs

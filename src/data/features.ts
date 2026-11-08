@@ -49,13 +49,13 @@ export const sections: Section[] = [
     points: ['Streaks and 30-day success rates', 'Numeric goals with units', 'Habits that check themselves off from workouts or meditation', 'A year view of every habit'],
   },
   {
-    id: 'hobbies', name: 'Hobbies', color: '#e07b3c', shot: 'hobbies', doc: 'habits-health',
+    id: 'hobbies', name: 'Hobbies', color: '#e07b3c', shot: 'hobbies', doc: 'hobbies-skills',
     tagline: 'Make time for what you love',
     text: 'Keep the hobbies you do or want to try, how much each one matters, and a weekly goal. Log a session from the list in one tap.',
     points: ['Weekly goals and streaks', 'Milestones and resources per hobby', 'A log of every session'],
   },
   {
-    id: 'skills', name: 'Skills', color: '#6f9a3c', shot: 'skills', doc: 'habits-health',
+    id: 'skills', name: 'Skills', color: '#6f9a3c', shot: 'skills', doc: 'hobbies-skills',
     tagline: 'Learn something, level by level',
     text: 'Track the skills you want to learn, from beginner to expert, with milestones to check off and your practice time.',
     points: ['Six levels per skill', 'Milestones and resources', 'Practice log'],
@@ -85,7 +85,7 @@ export const sections: Section[] = [
     points: ['Average mood and the emotions you felt most', 'Tasks done, workouts and finished items', 'Your best habits and most active day', 'Journal highlights from the month'],
   },
   {
-    id: 'achievements', name: 'Achievements', color: '#d9a521', shot: 'achievements', doc: 'insights-storage-music',
+    id: 'achievements', name: 'Achievements', color: '#d9a521', shot: 'achievements', doc: 'achievements',
     tagline: 'Level up as you go',
     text: 'Earn XP and levels from what you already do: reading, watching, finishing tasks, keeping habits and learning.',
     points: ['20 achievements with six tiers each', 'Bronze to Legend', 'Counted from your own files'],
