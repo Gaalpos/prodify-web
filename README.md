@@ -1,12 +1,12 @@
 # Prodify website
 
-Live at https://gaalpos.github.io/prodify-web/
+Live at https://prodify.gaalpos.dev/
 
 The showcase site for [Prodify](https://github.com/Gaalpos/prodify), built with [Astro](https://astro.build).
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321/prodify-web/
+npm run dev      # http://localhost:4321/
 npm run build    # static site in dist/
 ```
 

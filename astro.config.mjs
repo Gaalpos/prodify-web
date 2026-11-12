@@ -1,8 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-// Served from GitHub Pages at https://gaalpos.github.io/prodify-web/
+// Served from GitHub Pages at https://prodify.gaalpos.dev/ (DNS: a CNAME record at Porkbun to gaalpos.github.io).
 export default defineConfig({
-  site: 'https://gaalpos.github.io',
-  base: '/prodify-web',
+  site: 'https://prodify.gaalpos.dev',
 });
