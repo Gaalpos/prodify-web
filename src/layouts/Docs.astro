@@ -1,9 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from './Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { GROUPS } from '../content.config';
+import { docsFor } from '../data/docs';
+import { groupName, langOf, lp, tr } from '../i18n';
 
 interface Props {
   title: string;
@@ -13,23 +14,24 @@ interface Props {
 }
 
 const { title, description, current, headings = [] } = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order);
+const lang = langOf(Astro.url.pathname);
+const t = tr(lang);
+const docs = await docsFor(lang);
 const toc = headings.filter((h) => h.depth === 2);
 ---
 
-<Base title={`${title} · Prodify docs`} description={description}>
+<Base title={`${title} · ${t('Prodify docs', 'Guías de Prodify')}`} description={description}>
   <Header />
   <div class="wrap docs">
-    <aside class="side" aria-label="Docs">
+    <aside class="side" aria-label={t('Docs', 'Guías')}>
       <details class="navbox" open>
-        <summary>Docs menu</summary>
-        <a class:list={['top', { on: current === 'index' }]} href={`${base}docs/`}>Overview</a>
+        <summary>{t('Docs menu', 'Menú de guías')}</summary>
+        <a class:list={['top', { on: current === 'index' }]} href={lp(lang, 'docs/')}>{t('Overview', 'Inicio')}</a>
         {GROUPS.map((g) => (
           <div class="grp">
-            <p>{g}</p>
+            <p>{groupName(lang, g)}</p>
             {docs.filter((d) => d.data.group === g).map((d) => (
-              <a class:list={{ on: current === d.id }} href={`${base}docs/${d.id}/`} aria-current={current === d.id ? 'page' : undefined}>
+              <a class:list={{ on: current === d.id }} href={lp(lang, `docs/${d.id}/`)} aria-current={current === d.id ? 'page' : undefined}>
                 {d.data.color && <span class="dot" style={`background:${d.data.color}`}></span>}
                 {d.data.title}
               </a>
@@ -37,8 +39,8 @@ const toc = headings.filter((h) => h.depth === 2);
           </div>
         ))}
         <div class="grp">
-          <p>Help</p>
-          <a class:list={{ on: current === 'faq' }} href={`${base}docs/faq/`} aria-current={current === 'faq' ? 'page' : undefined}>FAQ</a>
+          <p>{t('Help', 'Ayuda')}</p>
+          <a class:list={{ on: current === 'faq' }} href={lp(lang, 'docs/faq/')} aria-current={current === 'faq' ? 'page' : undefined}>{t('FAQ', 'Preguntas frecuentes')}</a>
         </div>
       </details>
     </aside>
@@ -50,8 +52,8 @@ const toc = headings.filter((h) => h.depth === 2);
     </main>
 
     {toc.length > 1 && (
-      <nav class="toc" aria-label="On this page">
-        <p>On this page</p>
+      <nav class="toc" aria-label={t('On this page', 'En esta página')}>
+        <p>{t('On this page', 'En esta página')}</p>
         {toc.map((h) => <a href={`#${h.slug}`}>{h.text}</a>)}
       </nav>
     )}

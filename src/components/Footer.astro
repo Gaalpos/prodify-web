@@ -1,27 +1,37 @@
 ---
 import { APP_URL, LOGIN_URL } from '../data/site';
-const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+import { base, langOf, lp, tr } from '../i18n';
+const lang = langOf(Astro.url.pathname);
+const t = tr(lang);
 ---
 
 <footer>
   <div class="wrap foot">
     <div class="col">
       <span class="fb"><img src={`${base}favicon.svg`} alt="" width="22" height="22" /> Prodify</span>
-      <span class="meta">Notes, journal, tasks and habits in plain Markdown.</span>
+      <span class="meta">{t('Notes, journal, tasks and habits in plain Markdown.', 'Notas, diario, tareas y hábitos en Markdown.')}</span>
     </div>
-    <nav class="links" aria-label="Footer">
-      <a href={`${base}docs/`}>Docs</a>
-      <a href={`${base}docs/faq/`}>FAQ</a>
-      <a href={APP_URL}>Try web app</a>
-      <a href={LOGIN_URL}>Log in</a>
-      <a href={`${base}feedback/`}>Feedback</a>
-      <a href={`${base}#download`}>Download</a>
+    <nav class="links" aria-label={t('Footer', 'Pie de página')}>
+      <a href={lp(lang, 'docs/')}>{t('Docs', 'Guías')}</a>
+      <a href={lp(lang, 'docs/faq/')}>{t('FAQ', 'Preguntas')}</a>
+      <a href={APP_URL}>{t('Try web app', 'Probar la web')}</a>
+      <a href={LOGIN_URL}>{t('Log in', 'Entrar')}</a>
+      <a href={lp(lang, 'feedback/')}>{t('Feedback', 'Opiniones')}</a>
+      <a href={`${lp(lang)}#download`}>{t('Download', 'Descargar')}</a>
     </nav>
-    <p class="credits">
-      Exercise data from <a href="https://github.com/yuhonas/free-exercise-db">free-exercise-db</a> and <a href="https://wger.de">wger</a>.
-      Radio by <a href="https://somafm.com">SomaFM</a>, ambient sounds from <a href="https://freesound.org">Freesound</a>.
-      Uses the TMDB API but is not endorsed or certified by TMDB. Font: JetBrains Mono (OFL).
-    </p>
+    {lang === 'es' ? (
+      <p class="credits">
+        Datos de ejercicios de <a href="https://github.com/yuhonas/free-exercise-db">free-exercise-db</a> y <a href="https://wger.de">wger</a>.
+        Radio de <a href="https://somafm.com">SomaFM</a>, sonidos ambientales de <a href="https://freesound.org">Freesound</a>.
+        Usa la API de TMDB, pero TMDB no lo respalda ni lo certifica. Fuente: JetBrains Mono (OFL).
+      </p>
+    ) : (
+      <p class="credits">
+        Exercise data from <a href="https://github.com/yuhonas/free-exercise-db">free-exercise-db</a> and <a href="https://wger.de">wger</a>.
+        Radio by <a href="https://somafm.com">SomaFM</a>, ambient sounds from <a href="https://freesound.org">Freesound</a>.
+        Uses the TMDB API but is not endorsed or certified by TMDB. Font: JetBrains Mono (OFL).
+      </p>
+    )}
   </div>
 </footer>
 

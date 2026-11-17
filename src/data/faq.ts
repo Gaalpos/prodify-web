@@ -53,7 +53,7 @@ export const faq: FaqGroup[] = [
     items: [
       { q: 'Windows says the installer is unrecognized. Is it safe?', a: 'The installer isn\'t code-signed yet, so SmartScreen warns about it. Make sure you downloaded it from the Download buttons on this site, then choose More info → Run anyway.' },
       { q: 'How do I install the .apk on Android?', a: 'Open the downloaded file and allow installs from your browser or file manager when Android asks, then tap Install.' },
-      { q: 'How do I update?', a: 'Download the new release and install it over the old one. Your data isn\'t touched. On Android every release is signed with the same key, so it installs as an update.' },
+      { q: 'How do I update?', a: 'On Linux and Windows, Prodify tells you when a new version is out and installs it for you. You can also download the new release and install it over the old one. Your data isn\'t touched. On Android every release is signed with the same key, so it installs as an update.' },
       { q: 'Where do I report a bug or suggest a feature?', a: 'On the <a href="{base}feedback/">feedback page</a>. No account needed: write it in the form, and add an email if you\'d like a reply. You can also 👍 ideas others have sent.' },
     ],
   },

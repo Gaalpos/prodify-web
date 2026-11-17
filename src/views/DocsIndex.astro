@@ -1,0 +1,53 @@
+---
+import Docs from '../layouts/Docs.astro';
+import { GROUPS } from '../content.config';
+import { docsFor } from '../data/docs';
+import { groupName, langOf, lp, tr } from '../i18n';
+
+const lang = langOf(Astro.url.pathname);
+const t = tr(lang);
+const docs = await docsFor(lang);
+---
+
+<Docs title={t('Documentation', 'Documentación')} description={t('Guides for installing Prodify, using every section, and understanding where your data lives.', 'Guías para instalar Prodify, usar cada sección y entender dónde viven tus datos.')} current="index">
+  <h1>{t('Prodify docs', 'Guías de Prodify')}</h1>
+  <p class="lead">{t('Install Prodify, learn what each section can do, and see exactly how your data is stored.', 'Instala Prodify, descubre lo que puede hacer cada sección y mira exactamente cómo se guardan tus datos.')}</p>
+
+  {GROUPS.map((g) => (
+    <section class="grp">
+      <h2>{groupName(lang, g)}</h2>
+      <div class="cards">
+        {docs.filter((d) => d.data.group === g).map((d) => (
+          <a class="card" href={lp(lang, `docs/${d.id}/`)}>
+            <b>{d.data.color && <span class="dot" style={`background:${d.data.color}`}></span>}{d.data.title}</b>
+            <span>{d.data.description}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section class="grp">
+    <h2>{t('Help', 'Ayuda')}</h2>
+    <div class="cards">
+      <a class="card" href={lp(lang, 'docs/faq/')}>
+        <b>{t('FAQ', 'Preguntas frecuentes')}</b>
+        <span>{t('Quick answers about pricing, platforms, your data, privacy, sync and installing.', 'Respuestas rápidas sobre precio, plataformas, tus datos, privacidad, sincronización e instalación.')}</span>
+      </a>
+      <a class="card" href={lp(lang, 'feedback/')}>
+        <b>{t('Report a problem', 'Informar de un problema')}</b>
+        <span>{t('Found a bug or missing something? Tell us on the feedback page.', '¿Has encontrado un fallo o echas algo de menos? Cuéntanoslo en la página de opiniones.')}</span>
+      </a>
+    </div>
+  </section>
+</Docs>
+
+<style>
+  .grp h2{font-size:22px;margin:36px 0 14px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+  .card{display:flex;flex-direction:column;gap:6px;padding:16px 18px;background:var(--sf);border:1px solid var(--line);border-radius:12px;color:var(--ink);text-decoration:none}
+  .card:hover{border-color:var(--ac)}
+  .card b{display:flex;align-items:center;gap:8px}
+  .card .dot{width:8px;height:8px}
+  .card span{color:var(--mut);font-size:14.5px;line-height:1.5}
+</style>

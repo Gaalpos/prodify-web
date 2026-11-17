@@ -1,33 +1,55 @@
 ---
 import '../styles/global.css';
 import mono from '../fonts/jetbrains-mono-latin-wght-normal.woff2?url';
-
-const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+import { base, langOf, swap, tr } from '../i18n';
 
 interface Props {
   title?: string;
   description?: string;
 }
 
+const lang = langOf(Astro.url.pathname);
+const t = tr(lang);
 const {
-  title = 'Prodify — notes, journal, tasks and habits in plain Markdown',
-  description = 'Prodify keeps your notes, journal, tasks, projects, habits, health and collections in one calm app. Everything is saved as Markdown files you own. For Linux, Windows, Android and the web.',
+  title = t('Prodify — notes, journal, tasks and habits in plain Markdown', 'Prodify — notas, diario, tareas y hábitos en Markdown'),
+  description = t(
+    'Prodify keeps your notes, journal, tasks, projects, habits, health and collections in one calm app. Everything is saved as Markdown files you own. For Linux, Windows, Android and the web.',
+    'Prodify reúne tus notas, diario, tareas, proyectos, hábitos, salud y colecciones en una app tranquila. Todo se guarda como archivos Markdown que son tuyos. Para Linux, Windows, Android y la web.',
+  ),
 } = Astro.props;
+const site = Astro.site ?? Astro.url;
+const en = new URL(swap(Astro.url.pathname, 'en'), site).href;
+const es = new URL(swap(Astro.url.pathname, 'es'), site).href;
+const other = swap(Astro.url.pathname, lang === 'es' ? 'en' : 'es');
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline define:vars={{ here: lang, other }}>
+      // The language is chosen automatically from the browser, until the visitor picks one with the EN/ES switch.
+      (function () {
+        var pref = null;
+        try { pref = localStorage.getItem('prodify.lang'); } catch (e) {}
+        var nav = ((navigator.languages && navigator.languages[0]) || navigator.language || '').toLowerCase();
+        var want = pref === 'en' || pref === 'es' ? pref : nav.indexOf('es') === 0 ? 'es' : 'en';
+        if (want !== here) location.replace(other + location.search + location.hash);
+      })();
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#1f6f78" />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link rel="alternate" hreflang="en" href={en} />
+    <link rel="alternate" hreflang="es" href={es} />
+    <link rel="alternate" hreflang="x-default" href={en} />
     <link rel="preload" href={mono} as="font" type="font/woff2" crossorigin />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_US'} />
   </head>
   <body>
     <slot />

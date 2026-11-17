@@ -22,7 +22,7 @@ export const sections: Section[] = [
     id: 'tasks', name: 'Tasks', color: '#5fa57f', shot: 'tasks', doc: 'tasks',
     tagline: 'Type it the way you\'d say it',
     text: 'Write "Call mom friday 6pm !high every week" and Prodify sets the due date, reminder, priority and repeat for you, in English or Spanish.',
-    points: ['Lists, subtasks, priorities and reminders', 'List, Board and Eisenhower Matrix views', 'Repeating tasks: daily, weekdays, weekly, monthly, yearly', 'Today and All smart lists'],
+    points: ['Lists, subtasks, priorities and reminders', 'List, Board and Eisenhower Matrix views', 'Repeating tasks: daily, weekdays, weekly, monthly, yearly', 'Shared lists with Prodify Cloud'],
   },
   {
     id: 'journal', name: 'Journal', color: '#9a5fa0', shot: 'journal', doc: 'journal',
@@ -34,7 +34,7 @@ export const sections: Section[] = [
     id: 'notes', name: 'Notes', color: '#d4a43a', shot: 'notes', doc: 'notes',
     tagline: 'Markdown notes that open anywhere',
     text: 'A formatting toolbar when you want it and plain Markdown underneath. Properties are stored as YAML front matter, the same way Obsidian does it.',
-    points: ['Tags, categories and custom properties', 'Templates and a daily "Today\'s note"', 'View and Edit modes (Ctrl+E)', 'Archive and Trash'],
+    points: ['Tags, categories and custom properties', 'Templates and a daily "Today\'s note"', 'Panel or cards view', 'Archive and Trash'],
   },
   {
     id: 'projects', name: 'Projects', color: '#6f7fb0', shot: 'projects', doc: 'projects',
@@ -92,9 +92,9 @@ export const sections: Section[] = [
   },
   {
     id: 'files', name: 'Storage', color: '#7a8794', shot: 'files', doc: 'insights-storage-music',
-    tagline: 'Links, images, PDFs and files',
-    text: 'Save links with tags, keep images and PDFs, and browse every file in your Prodify folder, as a list or as cards.',
-    points: ['Paste or drop a link or a file', 'Tags and favorites', 'Browse the whole folder'],
+    tagline: 'Links, images, PDFs, files and Wikipedia',
+    text: 'Save links with tags, keep images and PDFs, browse every file in your Prodify folder and read Wikipedia articles, as a list or as cards.',
+    points: ['Paste or drop a link or a file', 'Tags and favorites', 'Read and save Wikipedia articles'],
   },
   {
     id: 'music', name: 'Music', color: '#c9629b', shot: 'music', doc: 'insights-storage-music',

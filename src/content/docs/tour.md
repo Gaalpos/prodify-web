@@ -22,8 +22,9 @@ Home is the page Prodify opens on. It greets you by the time of day and shows ca
 - **Clock and weather** for your city
 - **In progress**: what you're reading, watching or playing, or a suggestion from your "Want to" list
 - **Sounds**: ambient sounds and radio from the Music section
+- **Wikipedia**: articles to read and a search
 
-Lay the cards out in **Columns** or as a **Board**, choose how many columns you want, and turn cards on or off in **Settings → Sections and Home**.
+Lay the cards out in **Columns** or as a **Board**, choose how many columns you want and how many each card spans, and turn cards on or off in **Settings → Sections and Home**.
 
 ## Moving between sections
 

@@ -36,6 +36,10 @@ Prodify Cloud keeps your devices in sync.
 
 Sign in on another device, or in the [web app](../install/#web-app), with the same account to sync it. Your Cloud password is your account password: the same one that unlocks your encrypted data. Signing out stops syncing on that device; your data stays both there and in the cloud.
 
+### Shared lists
+
+With Prodify Cloud you can share a task list with other people who have an account too. Right-click the list and choose **Share…**, type their email, and decide whether each person **Can edit** or **Can view**. Changes reach everyone within seconds, and the list is encrypted before it's uploaded too.
+
 ### Plans
 
 | Plan | Storage | |
@@ -46,4 +50,4 @@ Sign in on another device, or in the [web app](../install/#web-app), with the sa
 
 ## What goes online
 
-Without Prodify Cloud, Prodify only goes online to fetch things you ask for: collection details and covers, exercise photos, the weather, music, and AI answers if you've added a key.
+Without Prodify Cloud, Prodify only goes online to fetch things you ask for: collection details and covers, exercise photos, the weather, music, Wikipedia, and AI answers if you've added a key.

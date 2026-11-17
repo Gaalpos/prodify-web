@@ -1,0 +1,11 @@
+---
+import DocPage from '../../../views/DocPage.astro';
+import { docsFor } from '../../../data/docs';
+
+export async function getStaticPaths() {
+  const docs = await docsFor('es');
+  return docs.map((doc, i) => ({ params: { slug: doc.id }, props: { doc, prev: docs[i - 1], next: docs[i + 1] } }));
+}
+---
+
+<DocPage {...Astro.props} />

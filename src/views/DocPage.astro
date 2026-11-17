@@ -1,0 +1,26 @@
+---
+import { render } from 'astro:content';
+import Docs from '../layouts/Docs.astro';
+import { langOf, lp, tr } from '../i18n';
+
+const { doc, prev, next } = Astro.props;
+const { Content, headings } = await render(doc);
+const lang = langOf(Astro.url.pathname);
+const t = tr(lang);
+---
+
+<Docs title={doc.data.title} description={doc.data.description} current={doc.id} headings={headings}>
+  <Content />
+  <nav class="pager" aria-label={t('Next and previous', 'Siguiente y anterior')}>
+    {prev ? <a href={lp(lang, `docs/${prev.id}/`)}><span>{t('Previous', 'Anterior')}</span>{prev.data.title}</a> : <span></span>}
+    {next ? <a class="nx" href={lp(lang, `docs/${next.id}/`)}><span>{t('Next', 'Siguiente')}</span>{next.data.title}</a> : <a class="nx" href={lp(lang, 'docs/faq/')}><span>{t('Next', 'Siguiente')}</span>{t('FAQ', 'Preguntas frecuentes')}</a>}
+  </nav>
+</Docs>
+
+<style>
+  .pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:48px}
+  .pager a{display:flex;flex-direction:column;gap:2px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--sf);color:var(--ink);text-decoration:none;font-weight:700}
+  .pager a:hover{border-color:var(--ac)}
+  .pager a span{color:var(--mut);font-weight:500;font-size:13px}
+  .pager .nx{text-align:right}
+</style>

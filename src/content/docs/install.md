@@ -31,7 +31,7 @@ Nothing to install: open the [web app](https://prodify-cloud.gaalpos.workers.dev
 Install the package from a terminal in the folder you downloaded it to:
 
 ```bash
-sudo apt install ./Prodify_1.9.0_amd64.deb
+sudo apt install ./Prodify_<version>_amd64.deb
 ```
 
 You can also double-click the `.deb` to open it in your software center. Prodify then shows up in your app menu.
@@ -55,4 +55,4 @@ The first time Prodify opens, a short setup asks a few questions. You can change
 
 ## Updating
 
-Download the new release and install it the same way. On Linux and Windows it replaces the old version; on Android it installs as an update because every release is signed with the same key. Your data is never touched by an update.
+On Linux and Windows, Prodify tells you when a new version is out and installs it for you. You can also download it and install it the same way as the first time: On Linux and Windows it replaces the old version; on Android it installs as an update because every release is signed with the same key. Your data is never touched by an update.

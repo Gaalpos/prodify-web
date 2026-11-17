@@ -1,41 +1,62 @@
 ---
 import { APP_URL, LOGIN_URL } from '../data/site';
-const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+import { langOf, lp, swap, tr } from '../i18n';
 const path = Astro.url.pathname;
-const inDocs = path.startsWith(`${base}docs`);
+const lang = langOf(path);
+const t = tr(lang);
+const home = lp(lang);
+const inDocs = path.startsWith(lp(lang, 'docs'));
+const app = APP_URL, login = LOGIN_URL;
 ---
 
 <header class="hdr">
   <div class="wrap bar">
-    <a class="brand" href={base} aria-label="Prodify home">
-      <img src={`${base}favicon.svg`} alt="" width="30" height="30" />
+    <a class="brand" href={home} aria-label={t('Prodify home', 'Inicio de Prodify')}>
+      <img src={`${lp('en')}favicon.svg`} alt="" width="30" height="30" />
       <span>Prodify</span>
     </a>
-    <nav aria-label="Main">
-      <a href={`${base}#sections`} class="hide-sm">Sections</a>
-      <a href={`${base}#privacy`} class="hide-sm">Privacy</a>
-      <a href={`${base}docs/`} class="hide-xs" aria-current={inDocs ? 'page' : undefined}>Docs</a>
-      <a href={`${base}feedback/`} class="hide-sm" aria-current={path.startsWith(`${base}feedback`) ? 'page' : undefined}>Feedback</a>
-      <a href={APP_URL} class="web">Try web app</a>
-      <a href={LOGIN_URL} class="login">Log in</a>
-      <a href={`${base}#download`} class="cta">Download</a>
+    <nav aria-label={t('Main', 'Principal')}>
+      <a href={`${home}#sections`} class="hide-sm">{t('Sections', 'Secciones')}</a>
+      <a href={`${home}#privacy`} class="hide-sm">{t('Privacy', 'Privacidad')}</a>
+      <a href={lp(lang, 'docs/')} class="hide-xs" aria-current={inDocs ? 'page' : undefined}>{t('Docs', 'Guías')}</a>
+      <a href={lp(lang, 'feedback/')} class="hide-sm" aria-current={path.startsWith(lp(lang, 'feedback')) ? 'page' : undefined}>{t('Feedback', 'Opiniones')}</a>
+      <a href={app} class="web">{t('Try web app', 'Probar la web')}</a>
+      <a href={login} class="login">{t('Log in', 'Entrar')}</a>
+      <a href={`${home}#download`} class="cta">{t('Download', 'Descargar')}</a>
+      <span class="langs" role="group" aria-label={t('Language', 'Idioma')}>
+        {(['en', 'es'] as const).map((l) => (
+          <a href={swap(path, l)} data-lang={l} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} title={l === 'en' ? 'English' : 'Español'}>{l.toUpperCase()}</a>
+        ))}
+      </span>
     </nav>
   </div>
 </header>
+
+<script>
+  // Picking a language remembers it, so the site stops choosing from the browser's language.
+  document.querySelectorAll<HTMLAnchorElement>('.langs a').forEach((a) => a.addEventListener('click', (e) => {
+    try { localStorage.setItem('prodify.lang', a.dataset.lang!); } catch {}
+    if (a.getAttribute('aria-current')) e.preventDefault();
+    else { e.preventDefault(); location.href = a.href + location.hash; }
+  }));
+</script>
 
 <style>
   .hdr{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
   .bar{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
   .brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font:700 22px var(--font);letter-spacing:-.01em}
   nav{display:flex;align-items:center;gap:2px}
-  nav a{color:var(--mut);text-decoration:none;font-weight:500;padding:8px 12px;border-radius:8px}
+  nav a{color:var(--mut);text-decoration:none;font-weight:500;padding:8px 12px;border-radius:8px;white-space:nowrap}
   nav a:hover,nav a[aria-current="page"]{color:var(--ink);background:var(--acs)}
   nav a.cta{color:var(--onac);background:var(--ac);font-weight:700;margin-left:6px}
   nav a.cta:hover{background:color-mix(in srgb,var(--ac) 88%,var(--ink))}
   nav a.web{color:var(--ac);font-weight:700}
   nav a.login{color:var(--ink);font-weight:700;border:1px solid var(--line);margin-left:4px}
   nav a.login:hover{border-color:var(--mut);background:var(--sf)}
-  @media (max-width:820px){nav .hide-sm{display:none}}
-  @media (max-width:560px){nav a.web{display:none}}
-  @media (max-width:440px){nav .hide-xs{display:none}}
+  .langs{display:inline-flex;margin-left:8px;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--sf)}
+  .langs a{padding:4px 8px;font:700 12.5px var(--font);border-radius:7px}
+  .langs a[aria-current="true"]{color:var(--onac);background:var(--ac)}
+  @media (max-width:1100px){nav .hide-sm{display:none}}
+  @media (max-width:700px){nav a.web{display:none}}
+  @media (max-width:520px){nav .hide-xs{display:none}nav a.login{display:none}}
 </style>

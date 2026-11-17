@@ -22,6 +22,10 @@ Each note has properties at the top: **created**, **tags** and **categories**, a
 
 The tabs across the top group your notes by **Categories** and **Tags**. Search the list, and sort it by date created or A–Z.
 
+## Panel or cards
+
+In **Panel**, the notes list sits on the left and the open note on the right. Drag the line between them to change the list's width (double-click to reset it). In **Settings → Notes** you can have the note side show only when a note is open, so the list gets the whole width. **Cards** shows every note as a card of its own height, capped so none gets too tall.
+
 ## Templates and Today's note
 
 Templates set the properties and text a new note starts with. **Today's note** opens (or creates) a note for the current day.

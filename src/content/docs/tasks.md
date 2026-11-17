@@ -31,7 +31,7 @@ Spanish works too: `mañana`, `viernes`, `a las 9`, `cada semana`, `!alta`.
 
 ## Lists and smart lists
 
-**Today** shows what's due today and overdue; **All** shows every open task. Create your own lists with a name, color and icon, and move tasks between them.
+**Today** shows what's due today and overdue; **All** shows every open task. Create your own lists with a name, color and icon, and move tasks between them. With Prodify Cloud you can **share a list** with other people: right-click it and choose **Share…**.
 
 ## Views
 

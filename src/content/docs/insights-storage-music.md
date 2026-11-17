@@ -27,6 +27,7 @@ Storage keeps the things you want to come back to:
 - **Links**: paste a link to save it, with its title and icon. Add **tags** to group them.
 - **Images** and **PDFs**: drop them in to keep a copy in your Prodify folder.
 - **Files**: browse every file in your Prodify folder and open it in place.
+- **Wikipedia**: search and read articles, save them as Markdown notes and, if you connect your account, see your lists and watchlist.
 
 Show them as a **List** or **Cards**, sort by newest, oldest, A–Z or type, and mark **Favorites**.
 
